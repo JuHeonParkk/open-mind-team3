@@ -1,1 +1,1 @@
-# open-mind-team3
+# Open-Mind-Team3
