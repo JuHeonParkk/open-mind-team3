@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import * as S from "../styles/ListPage.style";
-import logo from "../assets/logo.svg";
+import * as S from "@/styles/ListPage.style";
+import logo from "@/assets/logo.svg";
 
 export default function ListPage() {
   const navigate = useNavigate();
@@ -37,7 +37,7 @@ export default function ListPage() {
             <S.CardItem key={i}>
               <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
                 <div style={{ width: "60px", height: "60px", borderRadius: "50%", background: "#ddd" }} />
-                <div style={{ fontWeight: "bold" }}>아초는고양이</div>
+                <div style={{ fontWeight: "bold" }}></div>
               </div>
               <div style={{ fontSize: "14px", color: "#818181" }}>받은 질문 9개</div>
             </S.CardItem>

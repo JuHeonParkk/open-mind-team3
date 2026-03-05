@@ -1,5 +1,6 @@
 import styled from "styled-components";
 
+
 export const Container = styled.div`
   display: flex;
   flex-direction: column;
@@ -40,6 +41,7 @@ export const Button = styled.button`
   
   &:hover {
     background-color: ${({ theme }) => theme.colors.brown20};
+    border: 2px solid ${({ theme }) => theme.colors.brown40};
   }
 `;
 
@@ -96,12 +98,8 @@ export const CardItem = styled.div`
   
  
   box-shadow: ${({ theme }) => theme.shadows.pt1};
-  transition: transform 0.2s, box-shadow 0.2s;
 
-  &:hover {
-    transform: translateY(-5px);
-    box-shadow: ${({ theme }) => theme.shadows.pt2};
-  }
+
 
   
   .user-name {
