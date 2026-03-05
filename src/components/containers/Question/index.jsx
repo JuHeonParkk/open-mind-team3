@@ -1,5 +1,8 @@
 import { useEffect, useState } from "react";
 import { getQuestions } from "@/apis/questions";
+import QuestionCount from "@/components/containers/Question/QuestionCount";
+import QuestionItem from "@/components/containers/Question/QuestionItem";
+import PostModal from "@/components/containers/PostModal/index";
 
 export default function QuestionList({ subjectId }) {
   const [questions, setQuestions] = useState([]);
@@ -28,40 +31,13 @@ export default function QuestionList({ subjectId }) {
   return (
     <div>
       <div>
-        <p>{questions.length}개의 질문이 있습니다.</p>
+        <QuestionCount questions={questions} />
         {questions.map((question) => (
-          <div key={question.id}>
-            <div>
-              {!question.answer
-                ? "미답변"
-                : question.answer.isReject
-                  ? "답변 거절"
-                  : "답변 완료"}
-            </div>
-            <div>
-              <div>
-                <span>질문</span>
-                <span>{new Date(question.createdAt).toLocaleString()}</span>
-              </div>
-              <p>{question.content}</p>
-            </div>
-            {question.answer && (
-              <div>
-                <img src alt="답변자이미지" />
-                <div>
-                  <div>
-                    <span>답변자이름</span>
-                    <span>답변 날짜</span>
-                  </div>
-                  <p>답변</p>
-                </div>
-              </div>
-            )}
-            <div>
-              <button>좋아요 {question.like}</button>
-              <button>싫어요 {question.dislike}</button>
-            </div>
-          </div>
+          <QuestionItem
+            key={question.id}
+            question={question}
+            answer={question.answer}
+          />
         ))}
       </div>
       <button
