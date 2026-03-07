@@ -8,7 +8,7 @@ import {
   Dropdown,
 } from "@/components/containers/Home/HomeDropdown/HomeDropdown";
 
-export default function HomeForm() {
+export default function HomeButtonContainer() {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
   const handleDropdownButtonClick = () => {
