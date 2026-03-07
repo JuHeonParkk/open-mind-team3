@@ -178,15 +178,21 @@ export const SelectButton = styled.button`
   }
 `;
 export const SelectContainer = styled.div`
-  text-align: left;
   width: 79px;
   position: relative;
+  ${media.tablet`
+    margin-left: auto;
+    `
+  }
+  ${media.pc`
+    margin-left: auto;
+    `}
 `;
 
 export const OptionList = styled.ul`
   position: absolute;
   top: 38px;
-  left: 0;
+  right: 0;
   width: 79px;
   height: 68px;
   background-color: ${({ theme }) => theme.colors.gray10};
