@@ -2,6 +2,27 @@ import * as S from "./QuestionItem.style";
 import ReactionButtons from "@/components/containers/Question/ReactionButtons/ReactionButtons";
 
 export default function QuestionItem({ question, answer }) {
+  const rtf = new Intl.RelativeTimeFormat("ko", {
+    numeric: "auto",
+    style: "short",
+  });
+
+  const today = new Date();
+  const postDay = Math.floor(
+    (today - new Date(question.createdAt)) / (1000 * 60 * 60 * 24),
+  );
+
+  let formatPostDay;
+  if (postDay <= 7) {
+    formatPostDay = rtf.format(-postDay, "day"); // n일전
+  } else if (postDay <= 30) {
+    formatPostDay = rtf.format(-Math.floor(postDay / 7), "week"); // n주전
+  } else if (postDay <= 365) {
+    formatPostDay = rtf.format(-Math.floor(postDay / 30), "month"); // n개월 전
+  } else {
+    formatPostDay = rtf.format(-Math.floor(postDay / 365), "year"); // n년 전
+  }
+
   return (
     <S.Container key={question.id}>
       <S.AnswerStatus $isAnswer={!!answer}>
@@ -10,7 +31,7 @@ export default function QuestionItem({ question, answer }) {
       <S.QuestionWrapper>
         <S.ContentCategory>
           <span>질문</span>
-          <span>{new Date(question.createdAt).toLocaleString()}</span>
+          <span>{formatPostDay}</span>
         </S.ContentCategory>
         <S.Content>{question.content}</S.Content>
       </S.QuestionWrapper>

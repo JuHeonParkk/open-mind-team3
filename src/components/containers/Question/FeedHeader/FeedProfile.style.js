@@ -16,7 +16,7 @@ export const Container = styled.div`
   }
 `;
 
-// img로 변경 예정
+// Todo: img로 변경 예정
 export const Logo = styled.div`
   width: 124px;
   height: 49px;
@@ -33,7 +33,7 @@ export const ProfileImage = styled.div`
   height: 104px;
   border-radius: 9999px;
 
-  // background-image로 변경 예정
+  // Todo: background-image로 변경 예정
   background-color: ${({ theme }) => theme.colors.brown40};
 
   @media (min-width: 768px) {
