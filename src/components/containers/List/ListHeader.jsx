@@ -1,6 +1,6 @@
 import { SecondButton } from "@/components/common/Button";
-import * as S from "@/styles/ListPage.style";
-import logo from "@/assets/logo.svg";
+import * as S from "@/components/containers/List/ListPage.style";
+import logo from "@/assets/icons/logo.svg";
 import { useNavigate } from "react-router-dom";
 
 export default function ListHeader(){
