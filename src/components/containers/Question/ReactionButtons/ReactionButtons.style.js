@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { SecondButton } from "@/components/common/Button";
+import { SecondButton } from "@/components/common/Button/Button.style";
 
 export const Container = styled.div`
   width: 100%;

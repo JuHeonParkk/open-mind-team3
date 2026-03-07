@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { FloatingButton } from "@/components/common/Button";
+import { FloatingButton } from "@/components/common/Button/Button.style";
 
 export const Container = styled.div`
   width: 100%;
