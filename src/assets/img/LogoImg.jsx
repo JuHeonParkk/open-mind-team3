@@ -1,4 +1,4 @@
-export default function LogoImg({ width = 456, ...props }) {
+export default function LogoImg({ width = "100%", ...props }) {
   return (
     <svg
       width={width}
