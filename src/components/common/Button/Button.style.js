@@ -1,11 +1,11 @@
 import styled from "styled-components";
 
 export const BasicButton = styled.button`
-  ${({ theme }) => theme.typography.body3}
+  ${({ theme }) => theme.typography.caption1Regular}
   color: ${({ theme }) => theme.colors.gray10};
   background-color: ${({ theme }) => theme.colors.brown40};
 
-  height: 46px;
+  height: 34px;
   padding: 8px 12px;
   border-radius: 8px;
   border: 2px solid transparent;
@@ -30,13 +30,15 @@ export const BasicButton = styled.button`
   }
 
   @media (min-width: 768px) {
+    ${({ theme }) => theme.typography.body3}
+
     height: 46px;
     padding: 12px 24px;
   }
 `;
 
 export const SecondButton = styled.button`
-  ${({ theme }) => theme.typography.caption1Regular}
+  ${({ theme }) => theme.typography.caption1Actor}
   color: ${({ theme }) => theme.colors.brown40};
   background-color: ${({ theme }) => theme.colors.brown10};
 
@@ -67,6 +69,8 @@ export const SecondButton = styled.button`
   }
 
   @media (min-width: 768px) {
+    ${({ theme }) => theme.typography.body3Actor}
+
     height: 46px;
     padding: 12px 24px;
   }

@@ -1,0 +1,24 @@
+import { css } from "styled-components";
+
+const breakpoints = {
+  tablet: "768px",
+  pc: "1200px",
+};
+
+export const media = {
+  mobile: (...args) => css`
+    ${css(...args)};
+  `,
+
+  tablet: (...args) => css`
+    @media (min-width: ${breakpoints.tablet}) {
+      ${css(...args)};
+    }
+  `,
+
+  pc: (...args) => css`
+    @media (min-width: ${breakpoints.pc}) {
+      ${css(...args)};
+    }
+  `,
+};
