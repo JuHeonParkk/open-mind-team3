@@ -6,7 +6,7 @@ const FeedHeader = styled.div`
   position: relative;
   margin-bottom: 190px;
 
-  // Todo:background-image로 변경 예정
+  // background-image로 변경 예정
   background-color: ${({ theme }) => theme.colors.brown30};
 `;
 
