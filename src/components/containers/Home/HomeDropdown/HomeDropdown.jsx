@@ -19,6 +19,11 @@ const INPUT_LIMIT = 12;
 export const Dropdown = ({ onClick }) => {
   const [input, setInput] = useState("");
 
+  // TODO: api 및 기능 추가
+  const handleDropdownFormSubmit = (e) => {
+    e.preventDefault();
+  };
+
   const handleInputChange = (e) => {
     const { value } = e.target;
 
@@ -28,7 +33,7 @@ export const Dropdown = ({ onClick }) => {
   };
 
   return (
-    <S.DropdownForm>
+    <S.DropdownForm onSubmit={handleDropdownFormSubmit}>
       <S.DropdownHeader type="button" as="div" onClick={onClick}>
         <span>피드 만들기</span>
         <ArrowUpIcon />
@@ -46,7 +51,7 @@ export const Dropdown = ({ onClick }) => {
       </S.InputWrapper>
 
       <S.InputButtonWrapper>
-        <BasicButton>확인</BasicButton>
+        <BasicButton type="submit">확인</BasicButton>
       </S.InputButtonWrapper>
     </S.DropdownForm>
   );
