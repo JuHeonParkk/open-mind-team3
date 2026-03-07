@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { media } from "../../../styles/media";
+import { media } from "../../styles/media";
 
 export const Container = styled.div`
   display: flex;
@@ -86,7 +86,6 @@ export const MainHeader = styled.div`
 
 export const CardGrid = styled.div`
   display: grid;
-  gap: 20px;
   width: 100%;
   margin: 0 auto;
 
