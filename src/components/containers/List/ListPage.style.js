@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import { media } from "../../../styles/media";
 
 export const Container = styled.div`
   display: flex;
@@ -10,58 +11,102 @@ export const Container = styled.div`
 
 export const Header = styled.header`
   display: flex;
-  justify-content: space-between;
+  flex-direction: column;
+  justify-content: center;
   align-items: center;
+  margin-top: 40px;
+  margin-bottom: 52px;
+  gap: 20px;
+  // postion: sticky;
   width: 100%;
-  max-width: 1200px;
-  height: 80px;
-  padding: 0 24px;
+
+  ${media.tablet`
+    flex-direction: row;
+    justify-content: space-between;    
+    margin: 40px 0; 
+    padding: 0 50px;
+    
+    `}
+
+  ${media.pc`
+    max-width: 940px;
+    margin: 40px auto;
+    justify-content: space-between;    
+    flex-direction: row;
+    padding: 0;
+  
+    `}
 `;
 
-export const LogoImg = styled.img`
+export const LogoWrapper = styled.div`
   width: 146px;
   height: 57px;
-  cursor: pointer;
-  object-fit: contain;
+
+  & > svg {
+    width: 100%;
+    height: 100%;
+    display: block;
+  }
 `;
 
 export const MainSection = styled.main`
   width: 100%;
-  max-width: 1200px;
-  padding: 40px 24px;
+  max-width: 940px;
 `;
 
 export const MainHeader = styled.div`
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   align-items: center;
-  gap: 12px;
-  margin-bottom: 30px;
+  justify-content: space-between;
+  margin: 0 24px 30px;
 
   h1 {
     ${({ theme }) => theme.typography.h1};
     color: ${({ theme }) => theme.colors.gray60};
   }
+  ${media.pc`
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin-bottom: 30px;
+        gap:12px;
+      
+      `}
 
-  @media (min-width: 768px) {
-    flex-direction: column;
-    justify-content: center;
-    width: 100%;
-  }
+  ${media.tablet`
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin-bottom: 30px;
+        gap:12px;
+    
+    `}
 `;
 
 export const CardGrid = styled.div`
   display: grid;
+  gap: 20px;
+  width: 100%;
+  margin: 0 auto;
+
   grid-template-columns: repeat(2, 1fr);
+  padding: 0 24px;
   gap: 16px;
 
-  @media (min-width: 768px) {
-    grid-template-columns: repeat(3, 1fr);
+  ${media.tablet`
+    grid-template-columns: repeat(auto-fill, minmax(186px, 1fr));
+    padding: 0 32px; /* 최소 여백 32px */
     gap: 20px;
+    `
   }
 
-  @media (min-width: 1200px) {
-    grid-template-columns: repeat(4, 1fr);
+  ${media.pc`
+    grid-template-columns: repeat(4, 220px);
+    justify-content: center; 
+    padding: 0; 
+    max-width: 1200px;
+    `
   }
 `;
 
@@ -75,8 +120,14 @@ export const CardItem = styled.div`
   justify-content: space-between;
   height: 187px;
   cursor: pointer;
-
   box-shadow: ${({ theme }) => theme.shadows.pt1};
+
+
+  ${media.pc`
+    
+    width: 220px;
+    `
+  }
 
   .user-name {
     ${({ theme }) => theme.typography.body1};
@@ -90,7 +141,6 @@ export const CardItem = styled.div`
 `;
 
 export const SelectButton = styled.button`
-
   width: 79px;
   height: 34px;
   display: flex;
@@ -100,28 +150,23 @@ export const SelectButton = styled.button`
   gap: 4px;
   border-radius: 8px;
 
-  
-  ${({ theme }) =>
-    theme.typography.caption1Regular}; 
+  ${({ theme }) => theme.typography.caption1Regular};
   background-color: ${({ theme }) => theme.colors.gray10};
 
-  
   border: 1px solid
     ${({ theme, $isOpen }) =>
       $isOpen ? theme.colors.gray60 : theme.colors.gray40};
 
-  
   color: ${({ theme, $isOpen }) =>
     $isOpen ? theme.colors.gray60 : theme.colors.gray40};
   cursor: pointer;
   transition: all 0.2s ease;
 
- 
   svg {
     width: 12px;
     height: 12px;
     flex-shrink: 0;
-    
+
     path {
       fill: currentColor;
     }
@@ -134,8 +179,9 @@ export const SelectButton = styled.button`
   }
 `;
 export const SelectContainer = styled.div`
-  position: relative;
+  text-align: left;
   width: 79px;
+  position: relative;
 `;
 
 export const OptionList = styled.ul`
@@ -151,7 +197,7 @@ export const OptionList = styled.ul`
   margin: 0;
   list-style: none;
   z-index: 100;
-  box-shadow: ${({ theme }) => theme.shadows.pt1}; 
+  box-shadow: ${({ theme }) => theme.shadows.pt1};
 `;
 
 export const OptionItem = styled.li`
