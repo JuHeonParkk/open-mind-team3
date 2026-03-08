@@ -1,4 +1,4 @@
-import * as S from "./FeedProfile.style";
+import * as S from "@/components/containers/Question/FeedHeader/FeedProfile/FeedProfile.style";
 import LogoImg from "@/assets/img/LogoImg";
 import {
   ShareLinkIcon,

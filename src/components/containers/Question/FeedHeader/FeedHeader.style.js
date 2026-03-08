@@ -62,6 +62,12 @@ export const ScrollFeedProfile = styled.div`
   display: flex;
   align-items: center;
   gap: 12px;
+  cursor: pointer;
+
+  &:hover {
+    opacity: 0.8;
+    transition: opacity 0.3s ease;
+  }
 `;
 
 export const ProfileImage = styled.img`

@@ -3,7 +3,7 @@ import { getQuestions } from "@/apis/questions";
 import { MessagesIcon } from "@/assets/icons/Icons";
 import FeedHeader from "@/components/containers/Question/FeedHeader/FeedHeader";
 import QuestionCount from "@/components/containers/Question/QuestionCount/QuestionCount";
-import QuestionItem from "@/components/containers/Question/QuestionItem/QuestionItem";
+import QuestionItems from "@/components/containers/Question/QuestionItems/QuestionItems";
 import PostModal from "@/components/containers/PostModal/PostModal";
 
 import * as S from "./QuestionList.style";
@@ -54,17 +54,7 @@ export default function QuestionList({ subjectId }) {
       <S.Container>
         <S.QuestionListWrapper>
           <QuestionCount questions={questions} />
-          {questions.length === 0 ? (
-            <p>테스트질문없음아이콘</p>
-          ) : (
-            questions.map((question) => (
-              <QuestionItem
-                key={question.id}
-                question={question}
-                answer={question.answer}
-              />
-            ))
-          )}
+          <QuestionItems questions={questions} />
         </S.QuestionListWrapper>
         <S.QuestionPostButton onClick={() => setIsOpen(true)}>
           <MessagesIcon size={24} />
