@@ -3,7 +3,7 @@ import { media } from "@/styles/media";
 
 export const Container = styled.div`
   position: absolute;
-  top: calc(234px - 135px);
+  top: calc(234px - 150px);
   left: 50%;
   transform: translateX(-50%);
   display: flex;
@@ -14,18 +14,6 @@ export const Container = styled.div`
 
   ${media.tablet` 
     top: calc(234px - 180px);
-  `}
-`;
-
-// Todo: img로 변경 예정
-export const Logo = styled.div`
-  width: 124px;
-  height: 49px;
-  background-color: #ffffff;
-
-  ${media.tablet` 
-    width: 170px;
-    height: 67px;
   `}
 `;
 

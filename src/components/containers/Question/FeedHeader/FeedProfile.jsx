@@ -1,4 +1,5 @@
 import * as S from "./FeedProfile.style";
+import LogoImg from "@/assets/img/LogoImg";
 import {
   ShareLinkIcon,
   ShareKakaoIcon,
@@ -8,7 +9,7 @@ import {
 export default function FeedProfile() {
   return (
     <S.Container>
-      <S.Logo />
+      <LogoImg width={170} />
       <S.ProfileImage />
       <S.ProfileName>프로필이름</S.ProfileName>
       <S.ShareButtons>

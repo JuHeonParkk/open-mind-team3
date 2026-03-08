@@ -1,10 +1,7 @@
 import { useEffect, useState, useRef } from "react";
 import { getQuestions } from "@/apis/questions";
 import { MessagesIcon } from "@/assets/icons/Icons";
-import {
-  FeedHeader,
-  ScrollFeedHeader,
-} from "@/components/containers/Question/FeedHeader/FeedHeader";
+import FeedHeader from "@/components/containers/Question/FeedHeader/FeedHeader";
 import QuestionCount from "@/components/containers/Question/QuestionCount/QuestionCount";
 import QuestionItem from "@/components/containers/Question/QuestionItem/QuestionItem";
 import PostModal from "@/components/containers/PostModal/PostModal";
@@ -17,12 +14,12 @@ export default function QuestionList({ subjectId }) {
   const [isLoading, setIsLoading] = useState(true);
   const [isHeaderVisible, setIsHeaderVisible] = useState(false);
 
-  const scrollRef = useRef(null);
+  const headerRef = useRef(null);
 
   const handleScroll = () => {
-    if (!scrollRef.current) return;
-    const elementTop = scrollRef.current.getBoundingClientRect().top;
-    elementTop <= 50 ? setIsHeaderVisible(true) : setIsHeaderVisible(false);
+    if (!headerRef.current) return;
+    const elementTop = headerRef.current.getBoundingClientRect().bottom;
+    elementTop < 0 ? setIsHeaderVisible(true) : setIsHeaderVisible(false);
   };
 
   useEffect(() => {
@@ -53,9 +50,9 @@ export default function QuestionList({ subjectId }) {
 
   return (
     <>
-      {isHeaderVisible ? <ScrollFeedHeader /> : <FeedHeader />}
+      <FeedHeader isScroll={isHeaderVisible} ref={headerRef} />
       <S.Container>
-        <S.QuestionListWrapper ref={scrollRef}>
+        <S.QuestionListWrapper>
           <QuestionCount questions={questions} />
           {questions.length === 0 ? (
             <p>테스트질문없음아이콘</p>
