@@ -1,32 +1,12 @@
-import { useState, useEffect } from "react";
 import { scrollToTop } from "@/utils/windowScroll";
-
-import { BasicLinkIcon } from "@/assets/icons/Icons";
-import {
-  ShareLinkIcon,
-  ShareKakaoIcon,
-  ShareFacebookIcon,
-} from "@/assets/icons/SocialIcons";
+import ShareButtons from "@/components/containers/Question/FeedHeader/ShareButtons/ShareButtons";
 
 import * as S from "@/components/containers/Question/FeedHeader/FeedProfile/FeedProfile.style";
 
 export default function FeedProfile({ $isScroll }) {
-  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-
-  const handleToggle = () => {
-    if (!$isScroll) return;
-    setIsDropdownOpen((prev) => !prev);
-  };
-
   const handleProfileClick = () => {
     $isScroll && scrollToTop();
   };
-
-  useEffect(() => {
-    if (!$isScroll && isDropdownOpen) {
-      setIsDropdownOpen(false);
-    }
-  }, [$isScroll, isDropdownOpen]);
 
   return (
     <S.Container $isScroll={$isScroll}>
@@ -38,17 +18,7 @@ export default function FeedProfile({ $isScroll }) {
         />
         <S.ProfileName>프로필이름</S.ProfileName>
       </S.ProfileContent>
-      <S.ShareButtons>
-        <S.MobileShareButton onClick={handleToggle}>
-          <BasicLinkIcon />
-        </S.MobileShareButton>
-
-        <S.ShareDropdown $isScroll={$isScroll} $isOpen={isDropdownOpen}>
-          <ShareLinkIcon />
-          <ShareKakaoIcon />
-          <ShareFacebookIcon />
-        </S.ShareDropdown>
-      </S.ShareButtons>
+      <ShareButtons $isScroll={$isScroll} />
     </S.Container>
   );
 }

@@ -42,14 +42,6 @@ export const Container = styled.div`
           ${({ theme }) => theme.typography.h3};
         `};
       }
-
-      ${MobileShareButton} {
-        display: block;
-
-        ${media.tablet`
-          display: none;
-        `}
-      }
     `};
 `;
 `}
