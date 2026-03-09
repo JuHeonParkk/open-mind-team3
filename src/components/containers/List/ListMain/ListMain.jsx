@@ -1,7 +1,9 @@
-import * as S from "@/components/containers/List/ListPage.style";
 import { useState } from "react";
+
+import * as S from "@/components/containers/List/ListMain/ListMain.style";
 import { ArrowDownIcon, ArrowUpIcon } from "@/assets/icons/Icons";
-import ListCard from "@/components/containers/List/ListCard";
+import ListCard from "@/components/containers/List/ListCard/ListCard";
+// import InfiniteScrollObserver from "@/components/common/InfiniteScroll";
 
 export default function ListMain() {
   const [subjects, setSubjects] = useState([
@@ -11,17 +13,15 @@ export default function ListMain() {
     { id: 10, name: "오세훈", imageSource: "", questionCount: 12 },
     { id: 11, name: "유재석", imageSource: "", questionCount: 6 },
     { id: 12, name: "강호동", imageSource: "", questionCount: 9 },
-    { id: 13, name: "이수민", imageSource: "", questionCount: 4 },
-    { id: 14, name: "박서준", imageSource: "", questionCount: 11 },
-    { id: 15, name: "김민지", imageSource: "", questionCount: 0 },
-    { id: 16, name: "장동건", imageSource: "", questionCount: 13 },
-    { id: 17, name: "송지효", imageSource: "", questionCount: 2 },
-    { id: 18, name: "이광수", imageSource: "", questionCount: 7 },
-    { id: 19, name: "정해인", imageSource: "", questionCount: 5 },
-    { id: 20, name: "박보영", imageSource: "", questionCount: 14 },
+    { id: 71, name: "최유리", imageSource: "", questionCount: 3 },
+    { id: 81, name: "정민수", imageSource: "", questionCount: 8 },
+    { id: 91, name: "한지민", imageSource: "", questionCount: 1 },
+    { id: 101, name: "오세훈", imageSource: "", questionCount: 12 },
+    { id: 111, name: "유재석", imageSource: "", questionCount: 6 },
+    { id: 121, name: "강호동", imageSource: "", questionCount: 9 },
   ]);
 
-  const [sortBy, setSortBy] = useState("latest");
+  const [sortBy, setSortBy] = useState("createdAt");
   const [isOpen, setIsOpen] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
 
@@ -31,6 +31,7 @@ export default function ListMain() {
   const handleSortClick = (value) => {
     setSortBy(value);
     setIsOpen(false);
+    setCurrentPage(1);
   };
 
   return (
@@ -40,13 +41,13 @@ export default function ListMain() {
 
         <S.SelectContainer>
           <S.SelectButton onClick={() => setIsOpen(!isOpen)}>
-            {sortBy === "latest" ? "최신순" : "이름순"}
+            {sortBy === "createdAt" ? "최신순" : "이름순"}
             {isOpen ? <ArrowUpIcon /> : <ArrowDownIcon />}
           </S.SelectButton>
 
           {isOpen && (
             <S.OptionList>
-              <S.OptionItem onClick={() => handleSortClick("latest")}>
+              <S.OptionItem onClick={() => handleSortClick("createdAt")}>
                 최신순
               </S.OptionItem>
               <S.OptionItem onClick={() => handleSortClick("name")}>
@@ -59,7 +60,7 @@ export default function ListMain() {
 
       <S.CardGrid>
         {subjects.map((item) => (
-          <ListCard key={item.id} data={item} />
+          item ? <ListCard key={item.id} subject={item} /> : null
         ))}
       </S.CardGrid>
 
