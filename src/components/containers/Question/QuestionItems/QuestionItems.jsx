@@ -1,5 +1,6 @@
-import * as S from "@/components/containers/Question/QuestionItems/QuestionItems.style";
 import QuestionItem from "@/components/containers/Question/QuestionItem/QuestionItem";
+
+import * as S from "@/components/containers/Question/QuestionItems/QuestionItems.style";
 
 export default function QuestionItems({ questions }) {
   return (

@@ -1,10 +1,11 @@
-import * as S from "@/components/containers/Question/FeedHeader/FeedProfile/FeedProfile.style";
 import LogoImg from "@/assets/img/LogoImg";
 import {
   ShareLinkIcon,
   ShareKakaoIcon,
   ShareFacebookIcon,
 } from "@/assets/icons/SocialIcons";
+
+import * as S from "@/components/containers/Question/FeedHeader/FeedProfile/FeedProfile.style";
 
 export default function FeedProfile() {
   return (

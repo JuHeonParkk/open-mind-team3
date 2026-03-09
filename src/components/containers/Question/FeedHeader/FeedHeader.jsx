@@ -1,8 +1,9 @@
 import { forwardRef } from "react";
-import * as S from "@/components/containers/Question/FeedHeader/FeedHeader.style";
+
 import FeedProfile from "@/components/containers/Question/FeedHeader/FeedProfile/FeedProfile";
-import { ArrowLeftIcon } from "@/assets/icons/Icons";
-import { BasicLinkIcon } from "@/assets/icons/Icons";
+import { ArrowLeftIcon, BasicLinkIcon } from "@/assets/icons/Icons";
+
+import * as S from "@/components/containers/Question/FeedHeader/FeedHeader.style";
 
 const FeedHeader = forwardRef(({ isScroll }, ref) => {
   const handleScrollTop = () => {
