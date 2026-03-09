@@ -1,7 +1,7 @@
 import { Link, useSearchParams } from "react-router-dom";
 
 import * as S from "./Pagination.style";
-import { generatePagination } from "@/utils/pagination";
+import { generatePage } from "@/utils/pagination";
 import { ArrowLeftIcon, ArrowRightIcon } from "@/assets/icons/Icons";
 
 export default function Pagination({ totalPage = 1 }) {
@@ -10,7 +10,7 @@ export default function Pagination({ totalPage = 1 }) {
 
   const safeTotalPage = Math.max(1, totalPage);
 
-  const pages = generatePagination(currentPage, safeTotalPage);
+  const pages = generatePage(currentPage, safeTotalPage);
   const prevPage = Math.max(1, currentPage - 1);
   const nextPage = Math.min(safeTotalPage, currentPage + 1);
 

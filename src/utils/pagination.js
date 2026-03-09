@@ -1,6 +1,6 @@
-export function generatePagination(currentPage, totalPages) {
-  if (totalPages <= 5) {
-    return Array.from({ length: totalPages }, (_, i) => i + 1);
+export function generatePage(currentPage, totalPage) {
+  if (totalPage <= 5) {
+    return Array.from({ length: totalPage }, (_, i) => i + 1);
   }
 
   let start = currentPage - 2;
@@ -11,9 +11,9 @@ export function generatePagination(currentPage, totalPages) {
     end = 5;
   }
 
-  if (end > totalPages) {
-    end = totalPages;
-    start = totalPages - 4;
+  if (end > totalPage) {
+    end = totalPage;
+    start = totalPage - 4;
   }
 
   return Array.from({ length: 5 }, (_, i) => start + i);
