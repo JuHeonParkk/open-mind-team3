@@ -1,9 +1,7 @@
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useEffect, useRef } from "react";
 
 import * as S from "./HomeDropdown.style";
-import { createFeed } from "@/apis/subject";
-import { validateName } from "@/utils/validation";
+import { useCreateFeed } from "@/hooks/useCreateFeed";
 
 import { ArrowDownIcon, ArrowUpIcon, PersonIcon } from "@/assets/icons/Icons";
 import { CountInput } from "@/components/common/Input/Input";
@@ -19,47 +17,21 @@ export const DefaultDropdownButton = ({ onClick }) => (
 const INPUT_LIMIT = 12;
 
 export const Dropdown = ({ onClick }) => {
-  const [input, setInput] = useState("");
-  const [errorMessage, setErrorMessage] = useState("");
-  const navigate = useNavigate();
+  const inputRef = useRef(null);
+  const { input, errorMessage, handleInputChange, submitFeed, isInputEmpty } =
+    useCreateFeed();
 
-  const isInputEmpty = input.trim().length === 0;
+  useEffect(() => {
+    inputRef.current?.focus();
+  }, []);
 
-  const handleCreateFeed = async (inputName) => {
-    try {
-      const data = await createFeed(inputName);
-      localStorage.setItem("feedId", data.id);
-
-      navigate(`/post/${data.id}/answer`);
-    } catch (error) {
-      setErrorMessage("피드 생성에 실패했어요. 다시 시도해 주세요.");
-      console.error(error);
-    }
-  };
-
-  const handleDropdownFormSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
-
-    const result = validateName(input);
-
-    if (!result.isValid) {
-      setErrorMessage(result.message);
-      return;
-    }
-
-    await handleCreateFeed(input);
-  };
-
-  const handleInputChange = (e) => {
-    const { value } = e.target;
-
-    if (value.length <= INPUT_LIMIT) {
-      setInput(value);
-    }
+    submitFeed(input);
   };
 
   return (
-    <S.DropdownForm onSubmit={handleDropdownFormSubmit}>
+    <S.DropdownForm onSubmit={handleSubmit}>
       <S.DropdownHeader type="button" as="div" onClick={onClick}>
         <span>피드 만들기</span>
         <ArrowUpIcon />
@@ -67,11 +39,12 @@ export const Dropdown = ({ onClick }) => {
 
       <S.InputWrapper>
         <CountInput
+          ref={inputRef}
           leftIcon={PersonIcon}
           current={input.length}
           limit={INPUT_LIMIT}
           value={input}
-          onChange={handleInputChange}
+          onChange={(e) => handleInputChange(e, INPUT_LIMIT)}
           placeholder="이름을 입력하세요"
         />
         {errorMessage && <S.ErrorMessage>{errorMessage}</S.ErrorMessage>}
