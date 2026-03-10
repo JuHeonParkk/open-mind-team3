@@ -1,3 +1,4 @@
+import Modal from "@/components/common/Modal";
 import * as S from "./Confirm.style";
 
 export default function Confirm({ header, description, onConfirm }) {
@@ -7,16 +8,17 @@ export default function Confirm({ header, description, onConfirm }) {
   };
 
   return (
-    <S.Wrap>
+    <Modal>
       <S.ContentBox>
-        <h1>{header}</h1>
-        <p>{description}</p>
-        <div>
-          <button onClick={() => handleConfirm()}>확인</button>
-          <button onClick={() => setIsOpen(false)}>취소</button>
-        </div>
-        {/* 디자인 후 구현 */}
+        <S.ConfirmHeader>{header}</S.ConfirmHeader>
+        <S.ConfirmDescription>{description}</S.ConfirmDescription>
+        <S.ButtonWrapper>
+          <S.CancelButton onClick={() => setIsOpen(false)}>취소</S.CancelButton>
+          <S.ConfirmButton onClick={() => handleConfirm()}>
+            확인
+          </S.ConfirmButton>
+        </S.ButtonWrapper>
       </S.ContentBox>
-    </S.Wrap>
+    </Modal>
   );
 }
