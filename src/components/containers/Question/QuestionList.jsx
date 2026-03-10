@@ -34,6 +34,7 @@ export default function QuestionList({ subjectId }) {
     fetchQuestions();
   }, [fetchQuestions]);
 
+  // header 스크롤 감지
   useEffect(() => {
     const observer = new IntersectionObserver(
       ([entry]) => {
