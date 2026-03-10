@@ -8,7 +8,7 @@ import { ArrowRight2Icon } from "@/assets/icons/Icons";
 export default function ListHeader() {
   const navigate = useNavigate();
   const myFeedId = localStorage.getItem("myFeedId");
-  const handleGoAnswer = () => {
+  const handleAuthNavigation = () => {
     navigate(myFeedId ? `/post/${myFeedId}/answer` : "/");
   };
   return (
@@ -17,9 +17,9 @@ export default function ListHeader() {
         <LogoImg alt="OpenMind" />
       </S.LogoWrapper>
       {myFeedId ? (
-        <SecondButton onClick={handleGoAnswer}>답변하러 가기<ArrowRight2Icon width="18px" height="18px"/></SecondButton>
+        <SecondButton onClick={handleAuthNavigation}>답변하러 가기<ArrowRight2Icon width="18px" height="18px"/></SecondButton>
       ) : (
-        <SecondButton onClick={handleGoAnswer}>피드 생성하기<ArrowRight2Icon width="18px" height="18px"/></SecondButton>
+        <SecondButton onClick={handleAuthNavigation}>피드 생성하기<ArrowRight2Icon width="18px" height="18px"/></SecondButton>
       )}
     </S.Header>
   );
