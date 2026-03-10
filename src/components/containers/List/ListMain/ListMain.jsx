@@ -1,13 +1,18 @@
 import { useState } from "react";
+import { useSearchParams } from "react-router-dom";
 
 import * as S from "@/components/containers/List/ListMain/ListMain.style";
 import { ArrowDownIcon, ArrowUpIcon } from "@/assets/icons/Icons";
 import ListCard from "@/components/containers/List/ListCard/ListCard";
+import { useDeviceType } from "@/components/common/Hook/useDeviceType";
+import Pagination from "@/components/common/Pagination/index";
+
 // import InfiniteScrollObserver from "@/components/common/InfiniteScroll";
+
 
 export default function ListMain() {
   const [subjects, setSubjects] = useState([
-     { id: 7, name: "최유리", imageSource: "https://picsum.photos/600/600", questionCount: 3, createdAt: "2026-03-01T10:00:00" },
+  { id: 7, name: "최유리", imageSource: "https://picsum.photos/600/600", questionCount: 3, createdAt: "2026-03-01T10:00:00" },
   { id: 8, name: "정민수", imageSource: "https://picsum.photos/600/600", questionCount: 8, createdAt: "2026-03-02T11:20:00" },
   { id: 9, name: "한지민", imageSource: "https://picsum.photos/600/600", questionCount: 1, createdAt: "2026-03-03T09:15:00" },
   { id: 10, name: "abc", imageSource: "https://picsum.photos/600/600", questionCount: 12, createdAt: "2026-03-04T14:10:00" },
@@ -19,26 +24,34 @@ export default function ListMain() {
   { id: 101, name: "x", imageSource: "", questionCount: 12, createdAt: "2026-03-08T15:25:00" }
  ] );
 
-
+  const LIMIT = 8;
+  const [searchParams, setSearchParams] = useSearchParams();
+  const currentPage = Number(searchParams.get("page")) || 1;
+  const startIndex = (currentPage - 1) * LIMIT;
+  const endIndex = startIndex + LIMIT;
 
   const [sortBy, setSortBy] = useState("createdAt");
   const [isOpen, setIsOpen] = useState(false);
-  const [currentPage, setCurrentPage] = useState(1);
 
-  const [isDesktop, setIsDesktop] = useState(
-    typeof window !== "undefined" ? window.innerWidth >= 868 : true,
-  );
+  const { isPC, isLargeTablet } = useDeviceType(); 
   const handleSortClick = (value) => {
+  if (sortBy !== value) { 
     setSortBy(value);
-    setIsOpen(false);
-    setCurrentPage(1);
-  };
+    
+    const newParams = new URLSearchParams(searchParams);
+    newParams.set("page", "1"); 
+    setSearchParams(newParams);
+  }
+  setIsOpen(false);
+};
   const sortedSubjects = [...subjects].sort((a, b) => {
     if (sortBy === "name") {
       return a.name.localeCompare(b.name, "ko");
     }
     return new Date(b.createdAt)-new Date(a.createdAt);
   });
+
+  const currentItems = sortedSubjects.slice(startIndex, endIndex);
 
   return (
     <S.MainSection>
@@ -65,14 +78,13 @@ export default function ListMain() {
       </S.MainHeader>
 
       <S.CardGrid>
-        {sortedSubjects.map((item) =>
+        {currentItems.map((item) =>
           item ? <ListCard key={item.id} subject={item} /> : null,
         )}
       </S.CardGrid>
 
-      {/* 4. 하단 기능 분기 */}
-      {isDesktop ? (
-        <div>{/* 여기에 페이지네이션 컴포넌트 추가 */}</div>
+      {(isPC || isLargeTablet) ? (
+        <Pagination totalPage={Math.ceil(subjects.length / 8)} />
       ) : (
         <div>{/* 여기에 무한 스크롤 타겟 추가 */}</div>
       )}

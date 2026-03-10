@@ -1,6 +1,6 @@
 import { css } from "styled-components";
 
-const breakpoints = {
+export const breakpoints = {
   tablet: "768px",
   lgTablet: "868px",
   pc: "1200px",
