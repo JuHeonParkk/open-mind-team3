@@ -27,6 +27,7 @@ export const Dropdown = ({ onClick }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    
     submitFeed(input);
   };
 
