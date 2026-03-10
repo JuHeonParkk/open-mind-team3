@@ -48,7 +48,7 @@ export const ButtonContainer = styled.div`
 `;
 
 export const Button = styled.button`
-  ${({ theme }) => theme.typography.caption1Regular}
+  ${({ theme }) => theme.typography.body3Actor};
   height: 46px;
   padding: 12px 24px;
   border-radius: 8px;
