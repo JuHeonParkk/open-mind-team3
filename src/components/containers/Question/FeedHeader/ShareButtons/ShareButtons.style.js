@@ -3,10 +3,6 @@ import { media } from "@/styles/media";
 
 export const ShareButtons = styled.div`
   position: relative;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 12px;
 
   & button {
     cursor: pointer;
@@ -33,34 +29,49 @@ export const MobileShareButton = styled.button`
       display: block;
 
       ${media.tablet`
-          display: none;
+        display: none;
       `}
     `};
 `;
 
 export const ShareDropdown = styled.div`
-  // 스크롤 안 했을 때
+  position: absolute;
+  top: 55px;
+  right: -7px;
+  z-index: 100;
+
+  ${media.tablet`
+    display: none;
+  `};
+`;
+
+export const PcShareButtons = styled.div`
+  display: none;
+
+  ${media.tablet`
+    display: flex;
+  `}
+
+  ${({ $isScroll }) =>
+    !$isScroll &&
+    css`
+      display: flex;
+    `};
+`;
+
+export const ShareListWrapper = styled.div`
   display: flex;
-  justify-content: center;
   align-items: center;
-  flex-direction: row;
   gap: 12px;
 
-  // 스크롤 했을 때
-  ${({ $isScroll, $isOpen }) =>
+  ${({ $isScroll }) =>
     $isScroll &&
     css`
-      display: ${$isOpen ? "flex" : "none"};
       flex-direction: column;
-      position: absolute;
-      top: 55px;
-      right: -7px;
-      z-index: 100;
 
       ${media.tablet`
-        display: flex;
-        position: static;
         flex-direction: row;
+        position: static;
       `};
-    `}
+    `};
 `;

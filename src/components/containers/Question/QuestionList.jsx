@@ -50,7 +50,7 @@ export default function QuestionList({ subjectId }) {
 
   return (
     <>
-      <FeedHeader isScroll={isHeaderVisible} ref={headerRef} />
+      <FeedHeader $isScroll={isHeaderVisible} ref={headerRef} />
       <S.Container>
         <S.QuestionListWrapper>
           <QuestionCount questions={questions} />
