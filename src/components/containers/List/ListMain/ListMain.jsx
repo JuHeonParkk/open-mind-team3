@@ -4,11 +4,12 @@ import { useSearchParams } from "react-router-dom";
 import * as S from "@/components/containers/List/ListMain/ListMain.style";
 import { ArrowDownIcon, ArrowUpIcon } from "@/assets/icons/Icons";
 import ListCard from "@/components/containers/List/ListCard/ListCard";
-import { useDeviceType } from "@/components/common/Hook/useDeviceType";
+import { useDeviceType } from "@/hooks/useDeviceType";
 import Pagination from "@/components/common/Pagination/index";
 
 // import InfiniteScrollObserver from "@/components/common/InfiniteScroll";
 
+const LIMIT = 8;
 
 export default function ListMain() {
   const [subjects, setSubjects] = useState([
@@ -24,7 +25,6 @@ export default function ListMain() {
   { id: 101, name: "x", imageSource: "", questionCount: 12, createdAt: "2026-03-08T15:25:00" }
  ] );
 
-  const LIMIT = 8;
   const [searchParams, setSearchParams] = useSearchParams();
   const currentPage = Number(searchParams.get("page")) || 1;
   const startIndex = (currentPage - 1) * LIMIT;
@@ -84,7 +84,7 @@ export default function ListMain() {
       </S.CardGrid>
 
       {(isPC || isLargeTablet) ? (
-        <Pagination totalPage={Math.ceil(subjects.length / 8)} />
+        <Pagination totalPage={Math.ceil(subjects.length / LIMIT)} />
       ) : (
         <div>{/* 여기에 무한 스크롤 타겟 추가 */}</div>
       )}
