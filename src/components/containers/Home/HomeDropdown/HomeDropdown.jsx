@@ -1,7 +1,10 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 import * as S from "./HomeDropdown.style";
+import { createFeed } from "@/apis/subject";
 import { validateName } from "@/utils/validation";
+
 import { ArrowDownIcon, ArrowUpIcon, PersonIcon } from "@/assets/icons/Icons";
 import { CountInput } from "@/components/common/Input/Input";
 import { BasicButton } from "@/components/common/Button/Button.style";
@@ -18,8 +21,21 @@ const INPUT_LIMIT = 12;
 export const Dropdown = ({ onClick }) => {
   const [input, setInput] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
+  const navigate = useNavigate();
 
-  const handleDropdownFormSubmit = (e) => {
+  const handleCreateFeed = async (inputName) => {
+    try {
+      const data = await createFeed(inputName);
+      localStorage.setItem("feedId", data.id);
+
+      navigate(`/post/${data.id}/answer`);
+    } catch (error) {
+      setErrorMessage("피드 생성에 실패했어요. 다시 시도해 주세요.");
+      console.error(error);
+    }
+  };
+
+  const handleDropdownFormSubmit = async (e) => {
     e.preventDefault();
 
     const result = validateName(input);
@@ -29,8 +45,7 @@ export const Dropdown = ({ onClick }) => {
       return;
     }
 
-    // TODO: 성공시 api 요청 후 리다이렉트
-    console.log("성공 테스트");
+    await handleCreateFeed(input);
   };
 
   const handleInputChange = (e) => {
