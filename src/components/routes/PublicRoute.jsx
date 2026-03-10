@@ -14,5 +14,5 @@ export const PublicRoute = () => {
     return <Outlet />;
   }
 
-  return <Navigate to={`/post/${feedId}/answer`} />;
+  return <Navigate to={`/post/${feedId}/answer`} replace />;
 };
