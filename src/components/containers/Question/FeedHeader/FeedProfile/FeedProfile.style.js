@@ -42,11 +42,6 @@ export const ProfileContent = styled.div`
   justify-content: center;
   align-items: center;
   gap: 12px;
-
-  &:hover {
-    opacity: 0.8;
-    transition: opacity 0.3s ease;
-  }
 `;
 
 export const ProfileImage = styled.img`
