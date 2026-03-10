@@ -8,7 +8,7 @@ import GlobalStyle from "@/styles/GlobalStyle";
 import { PublicRoute } from "@/components/routes/PublicRoute";
 import HomePage from "@/pages/HomePage";
 import ListPage from "@/pages/ListPage";
-import PostTest from "@/components/containers/AnswerCard/PostTest";
+import PostTest from "@/components/containers/Question/AnswerInput/PostTest";
 import FeedPage from "@/pages/FeedPage";
 
 export default function App() {
