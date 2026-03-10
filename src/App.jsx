@@ -9,6 +9,7 @@ import HomePage from "@/pages/HomePage";
 import ListPage from "@/pages/ListPage";
 import PostTest from "@/components/containers/AnswerCard/PostTest";
 import FeedPage from "@/pages/FeedPage";
+import NotFoundPage from "./pages/NotFoundPage/NotFoundPage";
 
 export default function App() {
   return (
@@ -21,6 +22,7 @@ export default function App() {
           <Route path="/list" element={<ListPage />} />
           <Route path="/answer" element={<PostTest />} />
           <Route path="/post/:id" element={<FeedPage />} />
+          <Route path="*" element={<NotFoundPage />} />
         </Routes>
       </BrowserRouter>
     </ThemeProvider>
