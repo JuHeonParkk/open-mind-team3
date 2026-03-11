@@ -10,7 +10,7 @@ import PostModal from "@/components/containers/PostModal/PostModal";
 
 import * as S from "./QuestionList.style";
 
-export default function QuestionList({ subjectId }) {
+export default function QuestionList({ subjectId, isAnswer }) {
   const [questions, setQuestions] = useState([]);
   const [isOpen, setIsOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
@@ -53,9 +53,18 @@ export default function QuestionList({ subjectId }) {
     <>
       <FeedHeader $isScroll={isHeaderVisible} ref={headerRef} />
       <S.Container>
+        <S.ButtonWrapper>
+          <S.DeleteFeedButton
+            onClick={
+              () => console.log("피드 삭제") /* Confrim 띄우고 기능구현 */
+            }
+          >
+            피드 삭제하기
+          </S.DeleteFeedButton>
+        </S.ButtonWrapper>
         <S.QuestionListWrapper>
           <QuestionCount questions={questions} />
-          <QuestionItems questions={questions} />
+          <QuestionItems questions={questions} isAnswer={isAnswer} />
         </S.QuestionListWrapper>
         <S.QuestionPostButton onClick={() => setIsOpen(true)}>
           <MessagesIcon size={24} />

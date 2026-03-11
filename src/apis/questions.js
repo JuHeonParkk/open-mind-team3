@@ -1,8 +1,6 @@
 import instance from "@/apis/instance";
 
 export async function getQuestions(subjectId) {
-  subjectId = 13362; // 테스트용 고정값
-  // subjectId = 13311; // 테스트용 고정값2
   try {
     const response = await instance.get(`/subjects/${subjectId}/questions/`, {
       params: {
@@ -18,8 +16,6 @@ export async function getQuestions(subjectId) {
 }
 
 export async function postQuestions(subjectId, questionContent) {
-  subjectId = 13362; // 테스트용 고정값
-  // subjectId = 13311; // 테스트용 고정값2
   try {
     const response = await instance.post(`/subjects/${subjectId}/questions/`, {
       content: questionContent,
