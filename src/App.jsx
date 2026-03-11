@@ -9,6 +9,7 @@ import { PublicRoute } from "@/components/routes/PublicRoute";
 import HomePage from "@/pages/HomePage";
 import ListPage from "@/pages/ListPage";
 import FeedPage from "@/pages/FeedPage";
+import NotFoundPage from "./pages/NotFoundPage/NotFoundPage";
 
 export default function App() {
   return (
@@ -23,6 +24,7 @@ export default function App() {
 
           <Route path="/list" element={<ListPage />} />
           <Route path="/post/:subjectId/*" element={<FeedPage />} />
+          <Route path="*" element={<NotFoundPage />} />
         </Routes>
       </BrowserRouter>
     </ThemeProvider>
