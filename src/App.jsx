@@ -23,7 +23,6 @@ export default function App() {
           </Route>
 
           <Route path="/list" element={<ListPage />} />
-          <Route path="/answer" element={<PostTest />} />
           <Route path="/post/:id" element={<FeedPage />} />
         </Routes>
       </BrowserRouter>
