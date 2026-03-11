@@ -4,8 +4,9 @@ import AnswerItem from "@/components/containers/Question/AnswerItem/AnswerItem";
 import ReactionButtons from "@/components/containers/Question/ReactionButtons/ReactionButtons";
 
 import * as S from "@/components/containers/Question/QuestionItem/QuestionItem.style";
+import AnswerInput from "@/components/containers/Question/AnswerInput";
 
-export default function QuestionItem({ question, answer }) {
+export default function QuestionItem({ question, answer, isAnswer }) {
   return (
     <S.Container key={question.id}>
       <S.AnswerStatus $isAnswer={!!answer}>
@@ -19,6 +20,7 @@ export default function QuestionItem({ question, answer }) {
         <S.Content>{question.content}</S.Content>
       </S.QuestionWrapper>
       {answer && <AnswerItem answer={answer} />}
+      {isAnswer && answer && <AnswerInput />}
       <S.Line />
       <ReactionButtons question={question} />
     </S.Container>

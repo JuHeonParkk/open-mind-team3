@@ -22,7 +22,7 @@ export default function App() {
           </Route>
 
           <Route path="/list" element={<ListPage />} />
-          <Route path="/post/:id" element={<FeedPage />} />
+          <Route path="/post/:subjectId/*" element={<FeedPage />} />
         </Routes>
       </BrowserRouter>
     </ThemeProvider>

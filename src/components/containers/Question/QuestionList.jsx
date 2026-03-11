@@ -10,7 +10,7 @@ import PostModal from "@/components/containers/PostModal/PostModal";
 
 import * as S from "./QuestionList.style";
 
-export default function QuestionList({ subjectId }) {
+export default function QuestionList({ subjectId, isAnswer }) {
   const [questions, setQuestions] = useState([]);
   const [isOpen, setIsOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
@@ -55,7 +55,7 @@ export default function QuestionList({ subjectId }) {
       <S.Container>
         <S.QuestionListWrapper>
           <QuestionCount questions={questions} />
-          <QuestionItems questions={questions} />
+          <QuestionItems questions={questions} isAnswer={isAnswer} />
         </S.QuestionListWrapper>
         <S.QuestionPostButton onClick={() => setIsOpen(true)}>
           <MessagesIcon size={24} />
