@@ -2,9 +2,9 @@ import { getFormattedDate } from "@/utils/getFormattedDate";
 
 import AnswerItem from "@/components/containers/Question/AnswerItem/AnswerItem";
 import ReactionButtons from "@/components/containers/Question/ReactionButtons/ReactionButtons";
+import AnswerInput from "@/components/containers/Question/AnswerInput";
 
 import * as S from "@/components/containers/Question/QuestionItem/QuestionItem.style";
-import AnswerInput from "@/components/containers/Question/AnswerInput";
 
 export default function QuestionItem({ question, answer, isAnswer }) {
   return (
@@ -20,7 +20,7 @@ export default function QuestionItem({ question, answer, isAnswer }) {
         <S.Content>{question.content}</S.Content>
       </S.QuestionWrapper>
       {answer && <AnswerItem answer={answer} />}
-      {isAnswer && answer && <AnswerInput />}
+      {isAnswer && !answer && <AnswerInput />}
       <S.Line />
       <ReactionButtons question={question} />
     </S.Container>
