@@ -18,8 +18,14 @@ const INPUT_LIMIT = 12;
 
 export const Dropdown = ({ onClick }) => {
   const inputRef = useRef(null);
-  const { input, errorMessage, handleInputChange, submitFeed, isInputEmpty } =
-    useCreateFeed();
+  const {
+    input,
+    errorMessage,
+    pending,
+    handleInputChange,
+    submitFeed,
+    isInputEmpty,
+  } = useCreateFeed();
 
   useEffect(() => {
     inputRef.current?.focus();
@@ -27,7 +33,7 @@ export const Dropdown = ({ onClick }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    
+
     submitFeed(input);
   };
 
@@ -52,7 +58,7 @@ export const Dropdown = ({ onClick }) => {
       </S.InputWrapper>
 
       <S.InputButtonWrapper>
-        <BasicButton type="submit" disabled={isInputEmpty}>
+        <BasicButton type="submit" disabled={isInputEmpty || pending}>
           확인
         </BasicButton>
       </S.InputButtonWrapper>
