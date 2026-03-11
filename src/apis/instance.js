@@ -11,14 +11,15 @@ instance.interceptors.request.use(
   (config) => {
     if (config.method?.toLowerCase() === "get") {
       config.params = { team: TEAM, ...config.params };
-    } else if (config.data) {
-      if (config.data instanceof FormData) {
-        if (!config.data.has("team")) {
-          config.data.append("team", TEAM);
-        }
-      } else {
-        config.data = { team: TEAM, ...config.data };
-      }
+      return config;
+    }
+
+    if (!config.data) return config;
+
+    if (config.data instanceof FormData) {
+      if (!config.data.has("team")) config.data.append("team", TEAM);
+    } else {
+      config.data = { team: TEAM, ...config.data };
     }
 
     return config;
