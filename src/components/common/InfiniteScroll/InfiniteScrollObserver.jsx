@@ -1,4 +1,3 @@
-// @/components/common/InfiniteScroll/index.jsx
 import { useEffect, useRef } from "react";
 
 export default function InfiniteScrollObserver({ onIntersect }) {
@@ -11,7 +10,7 @@ export default function InfiniteScrollObserver({ onIntersect }) {
           onIntersect(); 
         }
       },
-      { threshold: 0.5 }
+      { threshold: 1 }
     );
 
     if (observerRef.current) observer.observe(observerRef.current);
