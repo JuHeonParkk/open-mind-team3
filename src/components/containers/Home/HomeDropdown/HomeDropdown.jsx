@@ -1,8 +1,11 @@
-import { useState } from "react";
+import { useEffect, useRef } from "react";
 
 import * as S from "./HomeDropdown.style";
-import { validateName } from "@/utils/validation";
-import { ArrowDownIcon, ArrowUpIcon, PersonIcon } from "@/assets/icons/Icons";
+import { useCreateFeed } from "@/hooks/useCreateFeed";
+
+import { ArrowUpIcon } from "@/assets/icons/ArrowUpIcon";
+import { PersonIcon } from "@/assets/icons/PersonIcon";
+import { ArrowDownIcon } from "@/assets/icons/ArrowDownIcon";
 import { CountInput } from "@/components/common/Input/Input";
 import { BasicButton } from "@/components/common/Button/Button.style";
 
@@ -16,33 +19,28 @@ export const DefaultDropdownButton = ({ onClick }) => (
 const INPUT_LIMIT = 12;
 
 export const Dropdown = ({ onClick }) => {
-  const [input, setInput] = useState("");
-  const [errorMessage, setErrorMessage] = useState("");
+  const inputRef = useRef(null);
+  const {
+    input,
+    errorMessage,
+    pending,
+    handleInputChange,
+    submitFeed,
+    isInputEmpty,
+  } = useCreateFeed();
 
-  const handleDropdownFormSubmit = (e) => {
+  useEffect(() => {
+    inputRef.current?.focus();
+  }, []);
+
+  const handleSubmit = (e) => {
     e.preventDefault();
 
-    const result = validateName(input);
-
-    if (!result.isValid) {
-      setErrorMessage(result.message);
-      return;
-    }
-
-    // TODO: 성공시 api 요청 후 리다이렉트
-    console.log("성공 테스트");
-  };
-
-  const handleInputChange = (e) => {
-    const { value } = e.target;
-
-    if (value.length <= INPUT_LIMIT) {
-      setInput(value);
-    }
+    submitFeed(input);
   };
 
   return (
-    <S.DropdownForm onSubmit={handleDropdownFormSubmit}>
+    <S.DropdownForm onSubmit={handleSubmit}>
       <S.DropdownHeader type="button" as="div" onClick={onClick}>
         <span>피드 만들기</span>
         <ArrowUpIcon />
@@ -50,18 +48,21 @@ export const Dropdown = ({ onClick }) => {
 
       <S.InputWrapper>
         <CountInput
+          ref={inputRef}
           leftIcon={PersonIcon}
           current={input.length}
           limit={INPUT_LIMIT}
           value={input}
-          onChange={handleInputChange}
+          onChange={(e) => handleInputChange(e, INPUT_LIMIT)}
           placeholder="이름을 입력하세요"
         />
         {errorMessage && <S.ErrorMessage>{errorMessage}</S.ErrorMessage>}
       </S.InputWrapper>
 
       <S.InputButtonWrapper>
-        <BasicButton type="submit">확인</BasicButton>
+        <BasicButton type="submit" disabled={isInputEmpty || pending}>
+          확인
+        </BasicButton>
       </S.InputButtonWrapper>
     </S.DropdownForm>
   );

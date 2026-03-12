@@ -1,16 +1,15 @@
 import { useEffect, useState, useRef, useCallback } from "react";
 
 import { getQuestions } from "@/apis/questions";
-import { MessagesIcon } from "@/assets/icons/Icons";
+import { MessagesIcon } from "@/assets/icons/MessagesIcon";
 
+import * as S from "./QuestionList.style";
 import FeedHeader from "@/components/containers/Question/FeedHeader/FeedHeader";
 import QuestionCount from "@/components/containers/Question/QuestionCount/QuestionCount";
 import QuestionItems from "@/components/containers/Question/QuestionItems/QuestionItems";
 import PostModal from "@/components/containers/PostModal/PostModal";
 
-import * as S from "./QuestionList.style";
-
-export default function QuestionList({ subjectId }) {
+export default function QuestionList({ subjectId, isAnswer }) {
   const [questions, setQuestions] = useState([]);
   const [isOpen, setIsOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
@@ -34,6 +33,7 @@ export default function QuestionList({ subjectId }) {
     fetchQuestions();
   }, [fetchQuestions]);
 
+  // header 스크롤 감지
   useEffect(() => {
     const observer = new IntersectionObserver(
       ([entry]) => {
@@ -53,9 +53,20 @@ export default function QuestionList({ subjectId }) {
     <>
       <FeedHeader $isScroll={isHeaderVisible} ref={headerRef} />
       <S.Container>
+        {isAnswer && (
+          <S.ButtonWrapper>
+            <S.DeleteFeedButton
+              onClick={
+                () => console.log("피드 삭제") /* Confrim 띄우고 기능구현 */
+              }
+            >
+              피드 삭제하기
+            </S.DeleteFeedButton>
+          </S.ButtonWrapper>
+        )}
         <S.QuestionListWrapper>
           <QuestionCount questions={questions} />
-          <QuestionItems questions={questions} />
+          <QuestionItems questions={questions} isAnswer={isAnswer} />
         </S.QuestionListWrapper>
         <S.QuestionPostButton onClick={() => setIsOpen(true)}>
           <MessagesIcon size={24} />
