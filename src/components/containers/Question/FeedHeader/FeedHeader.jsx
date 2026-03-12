@@ -9,8 +9,6 @@ import FeedProfile from "@/components/containers/Question/FeedHeader/FeedProfile
 import ShareButtons from "@/components/containers/Question/FeedHeader/ShareButtons/ShareButtons";
 import ScrollShareButtons from "@/components/containers/Question/FeedHeader/ScrollShareButtons/ScrollShareButtons";
 
-import * as S from "@/components/containers/Question/FeedHeader/FeedHeader.style";
-
 const FeedHeader = forwardRef(({ subjectData, $isScroll }, ref) => {
   return (
     <>
