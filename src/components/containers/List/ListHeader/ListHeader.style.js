@@ -26,7 +26,6 @@ export const Header = styled.header`
   margin-top: 40px;
   margin-bottom: 52px;
   gap: 20px;
-  // postion: sticky;
   width: 100%;
 
   ${media.tablet`
