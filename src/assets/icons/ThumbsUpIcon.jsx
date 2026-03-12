@@ -1,4 +1,4 @@
-export const ThumsUpIcon = ({ size = 24, color, ...props }) => (
+export const ThumbsUpIcon = ({ size = 24, color, ...props }) => (
   <svg
     width={size}
     height={size}
