@@ -51,6 +51,24 @@ export const DeleteFeedButton = styled(BasicButton)`
   `}
 `;
 
+export const PrevButton = styled(FloatingButton)`
+  position: fixed;
+  left: 24px;
+  bottom: 24px;
+  padding: 12px 14px;
+
+  display: flex;
+  align-items: center;
+
+  background-color: ${({ theme }) => theme.colors.gray60};
+  opacity: 0.3;
+  box-shadow: ${({ theme }) => theme.shadows.pt1};
+
+  &:hover {
+    opacity: 1;
+  }
+`;
+
 export const QuestionPostButton = styled(FloatingButton)`
   position: fixed;
   right: 24px;

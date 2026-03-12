@@ -1,6 +1,8 @@
 import { useEffect, useState, useCallback } from "react";
+import { Link } from "react-router-dom";
 
 import { subjectApi } from "@/apis/subject";
+import { ArrowRight2Icon } from "@/assets/icons/ArrowRight2Icon";
 import { MessagesIcon } from "@/assets/icons/MessagesIcon";
 
 import QuestionCount from "@/components/containers/Question/QuestionCount/QuestionCount";
@@ -54,6 +56,11 @@ export default function QuestionList({ subjectId, isAnswer }) {
         <QuestionCount questions={questions} />
         <QuestionItems questions={questions} isAnswer={isAnswer} />
       </S.QuestionListWrapper>
+
+      <S.PrevButton as={Link} to={`/list`}>
+        <ArrowRight2Icon size={24} style={{ transform: "scaleX(-1)" }} />
+      </S.PrevButton>
+
       <S.QuestionPostButton onClick={() => setIsOpen(true)}>
         <MessagesIcon size={24} />
         <span>질문 작성하기</span>
