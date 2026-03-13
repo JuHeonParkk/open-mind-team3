@@ -7,7 +7,12 @@ import AnswerInput from "@/components/containers/Question/AnswerInput";
 import * as S from "@/components/containers/Question/QuestionItem/QuestionItem.style";
 import Kebab from "@/components/containers/Question/QuestionItem/Kebab";
 
-export default function QuestionItem({ question, answer, isAnswer }) {
+export default function QuestionItem({
+  question,
+  answer,
+  isAnswer,
+  fetchQuestions,
+}) {
   return (
     <S.Container key={question.id}>
       <S.ItemHeader>
@@ -25,7 +30,9 @@ export default function QuestionItem({ question, answer, isAnswer }) {
         <S.Content>{question.content}</S.Content>
       </S.QuestionWrapper>
       {answer && <AnswerItem answer={answer} />}
-      {isAnswer && !answer && <AnswerInput />}
+      {isAnswer && !answer && (
+        <AnswerInput fetchQuestions={fetchQuestions} question={question} />
+      )}
       {/* 주헌님과 논의, useProfile 위치 결정후 props 결정 */}
       <S.Line />
       <ReactionButtons question={question} />
