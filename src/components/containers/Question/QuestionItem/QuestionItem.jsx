@@ -19,7 +19,7 @@ export default function QuestionItem({
         <S.AnswerStatus $isAnswer={!!answer}>
           {!answer ? "미답변" : answer.isRejected ? "답변 거절" : "답변 완료"}
         </S.AnswerStatus>
-        {isAnswer && <Kebab />}
+        {isAnswer && <Kebab answer={answer} fetchQuestions={fetchQuestions} />}
       </S.ItemHeader>
 
       <S.QuestionWrapper>
