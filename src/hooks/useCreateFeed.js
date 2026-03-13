@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 
 import { subjectApi } from "@/apis/subject";
 import { validateName } from "@/utils/validation";
+import { openToast } from "@/utils/toast";
 
 export const useCreateFeed = () => {
   const [input, setInput] = useState("");
@@ -30,7 +31,7 @@ export const useCreateFeed = () => {
 
       const data = await subjectApi.createFeed(inputName);
       localStorage.setItem("feedId", data.id);
-
+      openToast("새 피드가 생성되었어요.");
       navigate(`/post/${data.id}/answer`);
     } catch (error) {
       setErrorMessage("피드 생성에 실패했어요. 다시 시도해 주세요.");
