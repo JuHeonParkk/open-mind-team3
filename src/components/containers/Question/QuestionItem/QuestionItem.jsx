@@ -1,4 +1,4 @@
-import { getFormattedDate } from "@/utils/getFormattedDate";
+import { formatDate } from "@/utils/formatDate";
 
 import AnswerItem from "@/components/containers/Question/AnswerItem/AnswerItem";
 import ReactionButtons from "@/components/containers/Question/ReactionButtons/ReactionButtons";
@@ -25,7 +25,7 @@ export default function QuestionItem({
       <S.QuestionWrapper>
         <S.ContentCategory>
           <span>질문</span>
-          <span>{getFormattedDate(question)}</span>
+          <span>{formatDate.relative(question.createdAt)}</span>
         </S.ContentCategory>
         <S.Content>{question.content}</S.Content>
       </S.QuestionWrapper>
