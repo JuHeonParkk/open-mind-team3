@@ -14,16 +14,17 @@ export default function ReactionButtons({ question }) {
   const [isDislikeClicked, setIsDislikeClicked] = useState(() => {
     return !!localStorage.getItem(id);
   });
-  const [showEffect, setShowEffect] = useState(false);
+  const [showEffect, setShowEffect] = useState([]);
 
   const clickCount = useRef(0);
   const timerRef = useRef(null);
 
   const triggerEffect = () => {
-    setShowEffect(true);
+    const effectId = Date.now();
+    setShowEffect((prev) => [...prev, effectId]);
 
     setTimeout(() => {
-      setShowEffect(false);
+      setShowEffect((prev) => prev.filter((id) => id !== effectId));
     }, 2000);
   };
 
@@ -86,12 +87,12 @@ export default function ReactionButtons({ question }) {
   return (
     <S.Container>
       <S.LikeWrapper>
-        {showEffect && (
-          <S.ThumbsUpEffect>
+        {showEffect.map((effectId) => (
+          <S.ThumbsUpEffect key={effectId}>
             <ThumbsUpIcon size={20} color="#ffffff" />
             <span>+10</span>
           </S.ThumbsUpEffect>
-        )}
+        ))}
         <S.ReactionButton onClick={handleLikeClick}>
           <ThumbsUpIcon size={24} />
           <S.ReactionCount>

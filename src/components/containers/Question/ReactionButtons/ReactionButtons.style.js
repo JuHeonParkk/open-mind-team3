@@ -15,19 +15,23 @@ export const LikeWrapper = styled.div`
 
 export const ThumbsUpEffect = styled.div`
   height: 32px;
+  padding: 8px 12px;
   position: absolute;
   left: 50%;
   bottom: 100%;
   transform: translateX(-50%);
-  pointer-events: none;
-  animation: thumbsUpEffect 2s ease-out forwards;
-  background-color: ${({ theme }) => theme.colors.blue};
-  box-shadow: ${({ theme }) => theme.shadows.pt1};
-  border-radius: 16px;
-  padding: 8px 12px;
+
   display: flex;
   align-items: center;
   gap: 4px;
+
+  pointer-events: none;
+  animation: thumbsUpEffect 2s ease-out forwards;
+
+  background-color: ${({ theme }) => theme.colors.blue};
+  box-shadow: ${({ theme }) => theme.shadows.pt1};
+  border-radius: 16px;
+
   ${({ theme }) => theme.typography.caption1Medium};
   color: ${({ theme }) => theme.colors.gray10};
 
