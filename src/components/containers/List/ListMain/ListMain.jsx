@@ -4,7 +4,7 @@ import { useSearchParams } from "react-router-dom";
 import { useDeviceType } from "@/hooks/useDeviceType";
 import { ArrowUpIcon } from "@/assets/icons/ArrowUpIcon";
 import { ArrowDownIcon } from "@/assets/icons/ArrowDownIcon";
-import subjectApi from "@/apis/subject";
+import { subjectApi } from "@/apis/subject";
 
 import * as S from "@/components/containers/List/ListMain/ListMain.style";
 import ListCard from "@/components/containers/List/ListCard/ListCard";
@@ -24,39 +24,39 @@ export default function ListMain() {
   const totalPage = Math.ceil(totalCount / LIMIT);
 
   const currentPage = Math.max(1, Math.min(rawPage, totalPage));
-  const startIndex = (currentPage - 1) * LIMIT;
-  const endIndex = startIndex + LIMIT;
 
-  const [visibleCount, setVisibleCount] = useState(LIMIT);
   const [sortBy, setSortBy] = useState(() => {
     return localStorage.getItem("sortBy") || "createdAt";
   });
   const [isOpen, setIsOpen] = useState(false);
 
-  useEffect(()=> {
-    const fetchSubject = async () => {
-      try{
-        let limit = LIMIT;
-        let offset = isDesktopMode ? (currentPage-1)*limit : subjects.length;
-        const response = await subjectApi.getFeedList(limit, offset);
-        const {count, results} = response;
-        setTotalCount(count);
-        if(isDesktopMode){
-          setSubjects(results);
-        }
-        else{
-          setSubjects(subjects.length ==0 ? results : (prev)=> [...prev,])
-        }
+  const fetchSubject = useCallback( async (isInitial=false) =>{
+    try{
+      let offset = isDesktopMode ? (currentPage-1)*LIMIT : (isInitial ? 0 : subjects.length);
+      const response = await subjectApi.getFeedList(LIMIT, offset);
+      const {count, results} = response;
+      setTotalCount(count);
+      if(isDesktopMode || isInitial){
+        setSubjects(results);
       }
-      catch(error){
-        //로딩 스피너나 토스트??
-
+      else{
+        setSubjects((prev)=> [...prev,...results]);
       }
-
-
     }
+    catch(error){
+      //로딩 스피너 토스트??
+  
+    }
+  }
 
-  },[isDesktopMode, currentPage, sortBy])
+  ,[isDesktopMode, LIMIT,currentPage,subjects.length]);
+
+  useEffect(()=>{
+    fetchSubject(true);
+
+  },[sortBy, isDesktopMode,currentPage]);
+
+
 
   const handleSortClick = (value) => {
     if (sortBy !== value) {
@@ -76,15 +76,13 @@ export default function ListMain() {
     return new Date(b.createdAt) - new Date(a.createdAt);
   });
 
-  const currentItems = sortedSubjects.slice(startIndex, endIndex);
 
   const loadMore = useCallback(() => {
-    if (visibleCount < subjects.length) {
-      setVisibleCount((prev) => prev + 3);
+    if (subjects.length > 0 && subjects.length < totalCount){
+      fetchSubject(false);
     }
-  }, [visibleCount, subjects.length]);
+  }, [subjects.length, totalCount, fetchSubject]);
 
-  const mobileItems = sortedSubjects.slice(0, visibleCount);
 
   return (
     <S.MainSection>
@@ -111,7 +109,7 @@ export default function ListMain() {
       </S.MainHeader>
 
       <S.CardGrid>
-        {(isDesktopMode ? currentItems : mobileItems).map((item) =>
+        {sortedSubjects.map((item) =>
           item ? <ListCard key={item.id} subject={item} /> : null,
         )}
       </S.CardGrid>
@@ -119,7 +117,7 @@ export default function ListMain() {
       {isDesktopMode ? (
         <Pagination totalPage={totalPage} />
       ) : (
-        <InfiniteScrollObserver onIntersect={loadMore} />
+       subjects.length < totalCount && <InfiniteScrollObserver onIntersect={loadMore} />
       )}
     </S.MainSection>
   );
