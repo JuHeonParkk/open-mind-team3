@@ -57,14 +57,20 @@ export default function QuestionList({ subjectId, isAnswer }) {
         <QuestionItems questions={questions} isAnswer={isAnswer} />
       </S.QuestionListWrapper>
 
-      <S.MenuButton as={"Link"} to={"/list"}>
-        <MenuIcon size={24} color="#ffffff" />
-        <span>질문 목록보기</span>
-      </S.MenuButton>
-      <S.QuestionPostButton onClick={() => setIsOpen(true)}>
-        <MessagesIcon size={24} />
-        <span>질문 작성하기</span>
-      </S.QuestionPostButton>
+      <S.FloatingGroup>
+        <S.FloatingButtonWrapper>
+          <span>질문 목록보기</span>
+          <S.MenuButton as={Link} to={"/list"}>
+            <MenuIcon size={24} />
+          </S.MenuButton>
+        </S.FloatingButtonWrapper>
+        <S.FloatingButtonWrapper>
+          <span>질문 작성하기</span>
+          <S.QuestionPostButton onClick={() => setIsOpen(true)}>
+            <MessagesIcon size={24} />
+          </S.QuestionPostButton>
+        </S.FloatingButtonWrapper>
+      </S.FloatingGroup>
 
       {isOpen && (
         <PostModal
