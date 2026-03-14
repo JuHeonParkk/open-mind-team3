@@ -13,9 +13,8 @@ export default function ReactionButtons({ question }) {
   const [isDislikeClicked, setIsDislikeClicked] = useState(() => {
     return !!localStorage.getItem(id);
   });
-
-  /* 좋아요 무한클릭을 위한 state */
   const [showEffect, setShowEffect] = useState(false);
+
   const clickCount = useRef(0);
   const timerRef = useRef(null);
 
@@ -31,9 +30,8 @@ export default function ReactionButtons({ question }) {
   const handleLikeClick = async (e) => {
     e.preventDefault();
 
-    setLikeCount((prev) => prev + 1);
-
     clickCount.current += 1;
+    setLikeCount((prev) => prev + 1);
 
     // 10회 클릭마다 effect 적용
     if (clickCount.current >= 10) {
