@@ -30,33 +30,40 @@ export default function ListMain() {
   });
   const [isOpen, setIsOpen] = useState(false);
 
-  const fetchSubject = useCallback( async (isInitial=false) =>{
-    try{
-      let offset = isDesktopMode ? (currentPage-1)*LIMIT : (isInitial ? 0 : subjects.length);
-      const response = await subjectApi.getFeedList(LIMIT, offset);
-      const {count, results} = response;
-      setTotalCount(count);
-      if(isDesktopMode || isInitial){
-        setSubjects(results);
-      }
-      else{
-        setSubjects((prev)=> [...prev,...results]);
-      }
-    }
-    catch(error){
-      //로딩 스피너 토스트??
-  
-    }
-  }
+  const fetchSubject = useCallback(
+    async (isInitial = false) => {
+      try {
+        let offset = isDesktopMode
+          ? (currentPage - 1) * LIMIT
+          : isInitial
+            ? 0
+            : subjects.length;
+        const response = await subjectApi.getFeedList(LIMIT, offset);
+        const { count, results } = response;
+        setTotalCount(count);
+        if (isDesktopMode || isInitial) {
+          setSubjects(results);
+        } else {
+          setSubjects((prev) => {
+            const existingIds = new Set(prev.map((item) => item.id));
 
-  ,[isDesktopMode, LIMIT,currentPage,subjects.length]);
+            const uniqueResults = results.filter(
+              (item) => !existingIds.has(item.id),
+            );
 
-  useEffect(()=>{
+            return [...prev, ...uniqueResults];
+          });
+        }
+      } catch (error) {
+        //로딩 스피너 토스트??
+      }
+    },
+    [isDesktopMode, LIMIT, currentPage, subjects.length],
+  );
+
+  useEffect(() => {
     fetchSubject(true);
-
-  },[sortBy, isDesktopMode,currentPage]);
-
-
+  }, [sortBy, isDesktopMode, currentPage]);
 
   const handleSortClick = (value) => {
     if (sortBy !== value) {
@@ -76,13 +83,11 @@ export default function ListMain() {
     return new Date(b.createdAt) - new Date(a.createdAt);
   });
 
-
   const loadMore = useCallback(() => {
-    if (subjects.length > 0 && subjects.length < totalCount){
+    if (subjects.length > 0 && subjects.length < totalCount) {
       fetchSubject(false);
     }
   }, [subjects.length, totalCount, fetchSubject]);
-
 
   return (
     <S.MainSection>
@@ -117,7 +122,9 @@ export default function ListMain() {
       {isDesktopMode ? (
         <Pagination totalPage={totalPage} />
       ) : (
-       subjects.length < totalCount && <InfiniteScrollObserver onIntersect={loadMore} />
+        subjects.length < totalCount && (
+          <InfiniteScrollObserver onIntersect={loadMore} />
+        )
       )}
     </S.MainSection>
   );
