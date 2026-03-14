@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 
 import { MessagesIcon } from "@/assets/icons/MessagesIcon";
 import { subjectApi } from "@/apis/subject";
-// import userPlaceholderImage from "@/assets/img/user-placeholderImage.svg";
+import userPlaceholderImage from "@/assets/img/user-placeholderImage.svg";
 
 import * as S from "@/components/containers/List/ListCard/ListCard.style";
 
@@ -22,7 +22,7 @@ export default function ListCard({ subject }) {
   };
 
   // useEffect(async () => {
-  //   const response = await subjectApi.getQuestion(id,);
+  //   const response = await subjectApi.getQuestion(id,2,0);
   // }, []);
 
   return (

@@ -30,40 +30,30 @@ export default function ListMain() {
   });
   const [isOpen, setIsOpen] = useState(false);
 
-  const fetchSubject = useCallback(
-    async (isInitial = false) => {
-      try {
-        let offset = isDesktopMode
-          ? (currentPage - 1) * LIMIT
-          : isInitial
-            ? 0
-            : subjects.length;
-        const response = await subjectApi.getFeedList(LIMIT, offset);
-        const { count, results } = response;
-        setTotalCount(count);
-        if (isDesktopMode || isInitial) {
-          setSubjects(results);
-        } else {
-          setSubjects((prev) => {
-            const existingIds = new Set(prev.map((item) => item.id));
-
-            const uniqueResults = results.filter(
-              (item) => !existingIds.has(item.id),
-            );
-
-            return [...prev, ...uniqueResults];
-          });
-        }
-      } catch (error) {
-        //로딩 스피너 토스트??
+  const sortedSubjects = (data) => {
+    if (!data) return [];
+    return [...data].sort((a, b) => {
+      if (sortBy === "name") {
+        return a.name.localeCompare(b.name, "ko");
       }
-    },
-    [isDesktopMode, LIMIT, currentPage, subjects.length],
-  );
+      return new Date(b.createdAt) - new Date(a.createdAt);
+    });
+  };
+
+  const fetchSubject = useCallback(async () => {
+    try {
+      const response = await subjectApi.getFeedList(1000, 0);
+      const { count, results } = response;
+      setTotalCount(count);
+      setSubjects(sortedSubjects(results));
+    } catch (error) {
+      //로딩 스피너 토스트??
+    }
+  }, [sortBy]);
 
   useEffect(() => {
-    fetchSubject(true);
-  }, [sortBy, isDesktopMode, currentPage]);
+    fetchSubject();
+  }, [fetchSubject]);
 
   const handleSortClick = (value) => {
     if (sortBy !== value) {
@@ -72,22 +62,21 @@ export default function ListMain() {
       const newParams = new URLSearchParams(searchParams);
       newParams.set("page", "1");
       setSearchParams(newParams);
-      setSubjects([]);
     }
     setIsOpen(false);
   };
-  const sortedSubjects = [...subjects].sort((a, b) => {
-    if (sortBy === "name") {
-      return a.name.localeCompare(b.name, "ko");
-    }
-    return new Date(b.createdAt) - new Date(a.createdAt);
-  });
+
+  const displaySubjects = isDesktopMode
+    ? subjects?.slice((currentPage - 1) * LIMIT, currentPage * LIMIT)
+    : subjects?.slice(0, currentPage * LIMIT);
 
   const loadMore = useCallback(() => {
-    if (subjects.length > 0 && subjects.length < totalCount) {
-      fetchSubject(false);
+    if (currentPage < totalPage) {
+      const newParams = new URLSearchParams(searchParams);
+      newParams.set("page", (currentPage + 1).toString());
+      setSearchParams(newParams);
     }
-  }, [subjects.length, totalCount, fetchSubject]);
+  }, [currentPage, totalPage, searchParams, setSearchParams]);
 
   return (
     <S.MainSection>
@@ -114,7 +103,7 @@ export default function ListMain() {
       </S.MainHeader>
 
       <S.CardGrid>
-        {sortedSubjects.map((item) =>
+        {displaySubjects.map((item) =>
           item ? <ListCard key={item.id} subject={item} /> : null,
         )}
       </S.CardGrid>
