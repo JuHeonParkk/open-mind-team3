@@ -42,6 +42,7 @@ export default function QuestionList({ subjectId, isAnswer }) {
 
   return (
     <>
+      <SkeletonQuestion />
       {isAnswer && (
         <S.ButtonWrapper>
           <S.DeleteFeedButton
