@@ -1,4 +1,9 @@
-import { createGlobalStyle } from "styled-components";
+import { createGlobalStyle, keyframes } from "styled-components";
+
+const spin = keyframes`
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+`;
 
 const GlobalStyle = createGlobalStyle`
   * {
@@ -39,12 +44,19 @@ const GlobalStyle = createGlobalStyle`
 
   .toast {
     ${({ theme }) => theme.typography.caption1Regular}; 
-    background-color: ${({ theme }) => theme.colors.gray60};
+    background: rgba(61, 58, 58, 1);
     color: ${({ theme }) => theme.colors.gray10} !important;
-    border-radius: 8px !important;
+    border-radius: 30px !important;
     padding: 12px 20px !important;
     box-shadow: ${({ theme }) => theme.shadows.pt3} !important;
   }
+
+ .spinner {
+    animation: ${spin} 0.8s linear infinite;
+    transform-origin: center; 
+    display: inline-block;    
+  }
+  
 `;
 
 export default GlobalStyle;

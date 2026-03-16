@@ -1,5 +1,5 @@
-import { forwardRef } from "react";
-import { Link } from "react-router-dom";
+import { useEffect, useRef, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 import LogoImg from "@/assets/img/LogoImg";
 import { ArrowLeftIcon } from "@/assets/icons/ArrowLeftIcon";
@@ -10,30 +10,51 @@ import ScrollShareButtons from "@/components/containers/Question/FeedHeader/Scro
 
 import * as S from "@/components/containers/Question/FeedHeader/FeedHeader.style";
 
-const FeedHeader = forwardRef(({ subjectData, $isScroll }, ref) => {
+const FeedHeader = ({ subjectData }) => {
+  const [isHeaderVisible, setIsHeaderVisible] = useState(false);
+  const headerRef = useRef(null);
+  const navigate = useNavigate();
+
+  /* header scroll observer */
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        setIsHeaderVisible(!entry.isIntersecting);
+      },
+      { threshold: 0 },
+    );
+    if (headerRef.current) observer.observe(headerRef.current);
+    return () => observer.disconnect();
+  }, []);
+
   return (
     <>
       {/* 스크롤 안했을 때 헤더  */}
-      <S.MainHeader $hidden={$isScroll} ref={ref}>
+      <S.MainHeader $hidden={isHeaderVisible} ref={headerRef}>
         <S.ProfileContainer>
-          <LogoImg width={170} as={Link} to="/" />
+          <LogoImg width={170} />
           <FeedProfile subjectData={subjectData} />
-          <ShareButtons />
+          <ShareButtons subjectData={subjectData} />
         </S.ProfileContainer>
       </S.MainHeader>
 
       {/* 스크롤 헤더  */}
-      <S.ScrollContainer $visible={$isScroll}>
-        <S.PrevButton as={Link} to="/list">
-          <ArrowLeftIcon size={44} />
-        </S.PrevButton>
-        <S.ScrollFeedProfile>
-          <FeedProfile subjectData={subjectData} $isScroll={$isScroll} />
-        </S.ScrollFeedProfile>
-        <ScrollShareButtons $isScroll={$isScroll} />
-      </S.ScrollContainer>
+      {isHeaderVisible && (
+        <S.ScrollContainer $visible={isHeaderVisible}>
+          <S.PrevButton onClick={() => navigate(-1)}>
+            <ArrowLeftIcon size={44} />
+          </S.PrevButton>
+          <S.ScrollFeedProfile>
+            <FeedProfile
+              subjectData={subjectData}
+              $isScroll={isHeaderVisible}
+            />
+          </S.ScrollFeedProfile>
+          <ScrollShareButtons $isScroll={isHeaderVisible} />
+        </S.ScrollContainer>
+      )}
     </>
   );
-});
+};
 
 export default FeedHeader;
