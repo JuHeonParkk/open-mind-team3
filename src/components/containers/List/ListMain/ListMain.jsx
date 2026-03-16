@@ -5,15 +5,19 @@ import { useDeviceType } from "@/hooks/useDeviceType";
 import { ArrowUpIcon } from "@/assets/icons/ArrowUpIcon";
 import { ArrowDownIcon } from "@/assets/icons/ArrowDownIcon";
 import { subjectApi } from "@/apis/subject";
+import { LoadingSpinner } from "@/assets/icons/LoadingSpinnerIcon";
 
 import * as S from "@/components/containers/List/ListMain/ListMain.style";
 import ListCard from "@/components/containers/List/ListCard/ListCard";
 import Pagination from "@/components/common/Pagination/index";
 import InfiniteScrollObserver from "@/components/common/InfiniteScroll/InfiniteScrollObserver";
+import SkeletonList from "@/components/containers/List/SkeletonList/SkeletonList";
 
 export default function ListMain() {
   const [subjects, setSubjects] = useState([]);
   const [totalCount, setTotalCount] = useState(0);
+  const [isFirstLoading, setIsFirstLoading] = useState(false);
+  const [showSpinner, setShowSpinner] = useState(false);
 
   const { isPC, isLargeTablet } = useDeviceType();
   const isDesktopMode = isPC || isLargeTablet;
@@ -41,13 +45,23 @@ export default function ListMain() {
   };
 
   const fetchSubject = useCallback(async () => {
+    setIsFirstLoading(true);
+    setShowSpinner(false);
+    const timer = setTimeout(() => {
+      setShowSpinner(true);
+    }, 1000);
+
     try {
       const response = await subjectApi.getFeedList(1000, 0);
       const { count, results } = response;
       setTotalCount(count);
       setSubjects(sortedSubjects(results));
     } catch (error) {
-      //로딩 스피너 토스트??
+      console.error("list 화면 로딩 실패", e);
+    } finally {
+      clearTimeout(timer);
+      setIsFirstLoading(false);
+      setShowSpinner(false);
     }
   }, [sortBy]);
 
@@ -101,13 +115,22 @@ export default function ListMain() {
           )}
         </S.SelectContainer>
       </S.MainHeader>
-
-      <S.CardGrid>
-        {displaySubjects.map((item) =>
-          item ? <ListCard key={item.id} subject={item} /> : null,
-        )}
-      </S.CardGrid>
-
+      {isFirstLoading && displaySubjects.length == 0 ? (
+        <SkeletonList />
+      ) : (
+        <>
+          <S.CardGrid $isLoading={showSpinner}>
+            {displaySubjects.map((item) =>
+              item ? <ListCard key={item.id} subject={item} /> : null,
+            )}
+          </S.CardGrid>
+          {showSpinner && (
+            <S.SpinnerWrapper>
+              <LoadingSpinner />
+            </S.SpinnerWrapper>
+          )}
+        </>
+      )}
       {isDesktopMode ? (
         <Pagination totalPage={totalPage} />
       ) : (
