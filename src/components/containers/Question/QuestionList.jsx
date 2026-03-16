@@ -2,6 +2,7 @@ import { useEffect, useState, useCallback } from "react";
 import { Link } from "react-router-dom";
 
 import { subjectApi } from "@/apis/subject";
+import { openToast } from "@/utils/toast";
 import { MenuIcon } from "@/assets/icons/MenuIcon";
 import { MessagesIcon } from "@/assets/icons/MessagesIcon";
 
@@ -24,7 +25,7 @@ export default function QuestionList({ subjectId, isAnswer }) {
       const data = await subjectApi.getQuestions(subjectId);
       setQuestions(data.results);
     } catch (error) {
-      // Todo: 에러 핸들링 UI 추가
+      openToast.error("질문 목록을 가져오는데 실패했습니다.");
       console.error("Error fetching questions:", error);
     } finally {
       setIsLoading(false);
