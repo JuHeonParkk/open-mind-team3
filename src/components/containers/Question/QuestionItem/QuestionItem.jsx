@@ -33,7 +33,6 @@ export default function QuestionItem({
       {isAnswer && !answer && (
         <AnswerInput fetchQuestions={fetchQuestions} question={question} />
       )}
-      {/* 주헌님과 논의, useProfile 위치 결정후 props 결정 */}
       <S.Line />
       <ReactionButtons question={question} />
     </S.Container>

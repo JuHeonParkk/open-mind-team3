@@ -27,10 +27,10 @@ export default function Kebab({ answer, fetchQuestions }) {
 
     try {
       await answerApi.rejectAnswer(answer.id);
-      openToast("답변을 거절했습니다.");
+      openToas.success("답변을 거절했습니다.");
       fetchQuestions();
     } catch {
-      openToast("답변 거절에 실패했습니다. 다시 시도해 주세요");
+      openToast.error("답변 거절에 실패했습니다. 다시 시도해 주세요");
     }
   }
 

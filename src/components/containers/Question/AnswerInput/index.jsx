@@ -22,11 +22,10 @@ export default function AnswerInput({
     try {
       await questionApi.createAnswer(question.id, content);
       setContent("");
-      openToast("답변을 등록했습니다.");
+      openToast.success("답변을 등록했습니다.");
       fetchQuestions();
     } catch (error) {
-      openToast("답변 등록에 실패했습니다. 다시 시도해주세요");
-      console.log(error);
+      openToast.error("답변 등록에 실패했습니다. 다시 시도해주세요");
     }
   };
 
