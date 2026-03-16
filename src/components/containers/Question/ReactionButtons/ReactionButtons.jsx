@@ -31,12 +31,14 @@ export default function ReactionButtons({ question }) {
     }, 2000);
   };
 
+  //  /* 좋아요 무한클릭 */
   const handleLikeClick = async (e) => {
     e.preventDefault();
 
     clickCount.current += 1;
     setLikeCount((prev) => prev + 1);
 
+    // 10회 클릭마다 effect 적용
     if (clickCount.current >= 10) {
       triggerEffect();
       clickCount.current = 0;
@@ -60,6 +62,7 @@ export default function ReactionButtons({ question }) {
     }
   };
 
+  /* 싫어요 클릭 */
   const handleDislikeClick = async (e) => {
     e.preventDefault();
 
