@@ -69,17 +69,21 @@ export default function ListCard({ subject }) {
         <S.CardBack>
           <S.QuestionContent>
             <h3>{name}님이 받은 질문</h3>
-            {isLoading ? (
+            {isLoading && (
               <S.SpinnerWrapper>
                 <LoadingSpinner />
               </S.SpinnerWrapper>
-            ) : questionContent.length > 0 ? (
+            )}
+
+            {!isLoading && questionContent.length > 0 && (
               <S.QuestionList>
                 {questionContent.map((q) => (
                   <S.QuestionItem key={q.id}>{q.content}</S.QuestionItem>
                 ))}
               </S.QuestionList>
-            ) : (
+            )}
+
+            {!isLoading && questionContent.length === 0 && (
               <p style={{ textAlign: "left" }}>받은 질문이 없습니다.</p>
             )}
           </S.QuestionContent>
