@@ -26,7 +26,7 @@ export default function ListCard({ subject }) {
   const fetchQuestions = async () => {
     setIsLoading(true);
     try {
-      await new Promise((resolve) => setTimeout(resolve, 2000));
+      // await new Promise((resolve) => setTimeout(resolve, 2000));
       // throw new Error("test");
       const response = await subjectApi.getQuestions(id, 2, 0);
       setQuestionContent(response.results || []);
