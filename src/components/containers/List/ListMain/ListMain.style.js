@@ -157,7 +157,6 @@ export const SpinnerWrapper = styled.div`
   transform: translate(-50%, -50%);
   z-index: 999;
   
-  /* 스피너 아이콘 크기 조절 */
   svg {
     width: 50px;
     height: 50px;
