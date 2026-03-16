@@ -16,10 +16,10 @@ export default function ShareButtons({ subjectData, $isScroll }) {
     try {
       const currentUrl = `${window.location.origin}${pathname}`;
       await navigator.clipboard.writeText(currentUrl);
-      openToast("URL이 복사되었습니다");
+      openToast.success("URL이 복사되었습니다");
     } catch (error) {
       console.error("링크 복사 실패:", error);
-      openToast("URL 복사에 실패했습니다", "#B93333");
+      openToast.error("URL 복사에 실패했습니다");
     }
   };
 
