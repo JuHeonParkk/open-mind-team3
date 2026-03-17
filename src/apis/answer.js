@@ -1,9 +1,10 @@
-import instance from "./instance";
+import instance from "@/apis/instance";
 
-export async function getQuestions() {
-  return await instance.get("subjects/13312/questions/");
-}
-
-export async function createAnswer(questionId, data) {
-  return await instance.post(`questions/${questionId}/answers/`, data);
-}
+export const answerApi = {
+  //답변 수정
+  editAnswer: (answerId, content) =>
+    instance.put(`answers/${answerId}/`, {
+      content,
+      isRejected: false,
+    }),
+};

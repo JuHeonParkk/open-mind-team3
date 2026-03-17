@@ -1,6 +1,62 @@
 import styled from "styled-components";
 import { media } from "@/styles/media";
 
+export const CardInner = styled.div`
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transform-style: preserve-3d;
+  transition: transform 0.6s;
+`;
+export const CardContainer = styled.div`
+  perspective: 1000px;
+
+  background: ${({ theme }) => theme.colors.gray10};
+  border: 1px solid ${({ theme }) => theme.colors.gray30};
+  border-radius: 16px;
+  padding: 20px;
+  height: 187px;
+  cursor: pointer;
+  width: 100%;
+  box-shadow: ${({ theme }) => theme.shadows.pt1};
+
+  ${media.pc`
+    width: 220px;
+
+    &:hover ${CardInner} {
+      transform: rotateY(180deg);
+    }
+  `}
+`;
+
+
+const CardFace = styled.div`
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  backface-visibility: hidden;
+  border-radius: 16px;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+`;
+
+export const CardFront = styled(CardFace)`
+  transform: rotateY(0deg);
+`;
+
+export const CardBack = styled(CardFace)`
+  transform: rotateY(180deg);
+  background: ${({ theme }) => theme.colors.gray10};
+
+  padding: 0;
+  gap: 20px;
+
+  align-items: flex-start;
+  justify-content: flex-start;
+`;
+
 export const CardProfile = styled.div`
   background: ${({ theme }) => theme.colors.gray10};
   width: 100%;
@@ -9,94 +65,20 @@ export const CardProfile = styled.div`
   gap: 12px;
 `;
 
-export const CardContainer = styled.div`
-  background: ${({ theme }) => theme.colors.gray10};
-  border: 1px solid ${({ theme }) => theme.colors.gray30};
-  border-radius: 16px;
-  padding: 20px;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  height: 187px;
-  cursor: pointer;
-  width: 100%;
-  box-shadow: ${({ theme }) => theme.shadows.pt1};
-
-  ${media.pc`
-    
-    width: 220px;
-    `}
-`;
-
-export const CardInner = styled.div`
-  position: relative;
-  width: 100%;
-  height: 100%;
-  transform-style: preserve-3d;
-
-  transform: none;
-  transition: none;
-
-  ${media.pc`
-    transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
-    transform: ${({ $isFront }) => ($isFront ? "rotateY(0deg)" : "rotateY(180deg)")};
-  `}
-`;
-
-const CardFace = styled.div`
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  backface-visibility: hidden; 
-  border-radius: 16px;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  align-items: stretch;
-`;
-
-export const CardFront = styled(CardFace)`
-  z-index: 2;
-`;
-
-export const CardBack = styled(CardFace)`
-  transform: rotateY(180deg);
-  background: ${({ theme }) => theme.colors.gray20}
-  text-align: center;
-  padding:0;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;  
-  justify-content: flex-start;   
-  text-align: center;
-  gap: 20px;               
-
-  
-`;
-
-export const QuestionContent = styled.p`
-  margin: 0;
-  padding: 0 10px;
-  word-break: break-all;
-  line-height: 1.5;
-  color: ${({ theme }) => theme.colors.gray50};
-  flex: 1;
-  display: flex;
-`;
-
-export const SubjectName = styled.div`
-  ${({ theme }) => theme.typography.body1};
-  color: ${({ theme }) => theme.colors.gray60};
-  span {
-    color: ${({ theme }) => theme.colors.blue};
-  }
-`;
-
 export const SubjectImage = styled.img`
   width: 60px;
   height: 60px;
   border-radius: 50%;
   object-fit: cover;
+`;
+
+export const SubjectName = styled.div`
+  ${({ theme }) => theme.typography.body1};
+  color: ${({ theme }) => theme.colors.gray60};
+
+  span {
+    color: ${({ theme }) => theme.colors.blue};
+  }
 `;
 
 export const CardFooter = styled.div`
@@ -116,7 +98,58 @@ export const QuestionLabel = styled.div`
     height: 18px;
   }
 `;
+
 export const QuestionCount = styled.div`
   ${({ theme }) => theme.typography.body2};
   color: ${({ theme }) => theme.colors.gray40};
+`;
+
+export const QuestionContent = styled.div`
+  padding: 0 10px;
+  word-break: break-all;
+  line-height: 1.5;
+  color: ${({ theme }) => theme.colors.gray50};
+  flex: 1;
+
+  display: flex;
+  flex-direction: column;
+  position: relative;
+
+  h3 {
+    font-size: 16px;
+    font-weight: 700;
+    margin-bottom: 12px;
+    color: var(--grayscale-60);
+    text-align: left;
+  }
+`;
+
+export const SpinnerWrapper = styled.div`
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+`;
+
+export const QuestionList = styled.ul`
+  list-style: none;
+  padding: 0;
+  margin: 0;
+
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+`;
+
+export const QuestionItem = styled.li`
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--grayscale-50);
+  text-align: left;
+  word-break: break-all;
+
+  &::before {
+    content: "Q. ";
+    font-weight: bold;
+  }
 `;

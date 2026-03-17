@@ -1,25 +1,68 @@
-import * as S from "@/components/containers/Question/AnswerItem/AnswerItem.style";
-import { getFormattedDate } from "@/utils/getFormattedDate";
+import { useState, useRef, useEffect } from "react";
+import { formatDate } from "@/utils/formatDate";
 
-export default function AnswerItem({ answer }) {
+import placeholderImage from "@/assets/img/user-placeholderImage.svg";
+
+import * as S from "@/components/containers/Question/AnswerItem/AnswerItem.style";
+
+export default function AnswerItem({ answer, subjectData }) {
   const { content, isRejected } = answer;
+  const [isExpanded, setIsExpanded] = useState(false);
+  const [isOverflow, setIsOverflow] = useState(false);
+
+  const textRef = useRef(null);
+
+  useEffect(() => {
+    const el = textRef.current;
+    if (el) {
+      setIsOverflow(el.scrollHeight > el.clientHeight);
+    }
+  }, [content]);
+
+  const handleExpand = () => {
+    setIsExpanded(true);
+  };
 
   return (
     <S.Container>
-      {/* Todo: 임시 이미지 링크입니다. 나중에 연결되면 이미지 src 변경 필요 */}
       <S.AnswerImage
-        src="https://picsum.photos/600/600"
+        src={subjectData?.imageSource || placeholderImage}
         alt="답변자프로필이미지"
       />
       <S.AnswerContent>
         <S.AnswerProfile>
-          {/* Todo: 나중에 실제 답변자 이름으로 변경 필요 */}
-          <S.AnswerProfileName>답변자이름</S.AnswerProfileName>
-          <S.AnswerProfileDate>{getFormattedDate(answer)}</S.AnswerProfileDate>
+          <S.AnswerProfileName>
+            {subjectData?.name || "사용자"}
+          </S.AnswerProfileName>
+          <S.AnswerProfileDate>
+            {formatDate.relative(answer.createdAt)}
+          </S.AnswerProfileDate>
         </S.AnswerProfile>
-        <S.AnswerText $isRejected={isRejected}>
-          {isRejected ? "답변거절" : content}
-        </S.AnswerText>
+
+        <S.TextWrapper>
+          <S.AnswerText
+            ref={textRef}
+            $isExpanded={isExpanded}
+            $isRejected={isRejected}
+          >
+            {isRejected ? "답변거절" : content}
+          </S.AnswerText>
+
+          {!isExpanded && isOverflow && (
+            <S.MoreBtn onClick={handleExpand}>더보기</S.MoreBtn>
+          )}
+
+          {isExpanded && (
+            <S.FoldBtn
+              onClick={(e) => {
+                e.stopPropagation();
+                setIsExpanded(false);
+              }}
+            >
+              간략히 보기
+            </S.FoldBtn>
+          )}
+        </S.TextWrapper>
       </S.AnswerContent>
     </S.Container>
   );

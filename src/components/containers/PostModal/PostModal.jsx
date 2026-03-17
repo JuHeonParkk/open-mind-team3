@@ -1,39 +1,45 @@
 import { useState } from "react";
 
-import { postQuestions } from "@/apis/questions";
+import { subjectApi } from "@/apis/subject";
 import { openToast } from "@/utils/toast";
 
-import Modal from "@/components/common/Modal/index";
-import { CloseIcon, MessagesIcon } from "@/assets/icons/Icons";
+import { CloseIcon } from "@/assets/icons/CloseIcon";
+import { MessagesIcon } from "@/assets/icons/MessagesIcon";
+import placeholderImage from "@/assets/img/user-placeholderImage.svg";
 
 import * as S from "@/components/containers/PostModal/PostModal.style";
+import Modal from "@/components/common/Modal/index";
 
-const MAX_LENGTH = 20;
+const MAX_LENGTH = 30;
 
-export default function PostModal({ subjectId, onClose, onSuccess }) {
+export default function PostModal({
+  subjectId,
+  subjectData,
+  onClose,
+  onSuccess,
+}) {
   const [questionContent, setQuestionContent] = useState("");
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     try {
-      await postQuestions(subjectId, questionContent);
+      await subjectApi.createQuestion(subjectId, questionContent);
       if (onSuccess) onSuccess(); // 질문 생성 후 성공 콜백 호출
       onClose(); // 질문 생성 후 모달 닫기
+      openToast.success("질문이 성공적으로 생성되었습니다.");
     } catch (error) {
-      console.error("질문 생성 실패:", error);
-      openToast("질문 생성에 실패했습니다. 다시 시도해주세요.", "#FF0000");
+      openToast.error("질문 생성에 실패했습니다. 다시 시도해주세요.");
     }
   };
 
   const handleInputChange = (e) => {
-    let { value } = e.target;
+    const { value } = e.target;
 
-    if (value.length > MAX_LENGTH) {
-      value = value.slice(0, MAX_LENGTH);
-    }
-    setQuestionContent(value);
+    if (value.length <= MAX_LENGTH) setQuestionContent(value);
   };
+
+  /* 질문이 입력되지 않았거나 공백일 때 버튼 비활성화 */
   const isButtonDisabled = questionContent.trim().length === 0;
 
   return (
@@ -51,12 +57,11 @@ export default function PostModal({ subjectId, onClose, onSuccess }) {
 
         <S.ProfileWrapper>
           <span>To.</span>
-          {/* Todo: api에서 질문 대상자 정보 받아오기 */}
           <S.ProfileImage
-            src="https://picsum.photos/600/600"
+            src={subjectData?.imageSource || placeholderImage}
             alt="질문자 이미지"
           />
-          <S.ProfileName>프로필이름</S.ProfileName>
+          <S.ProfileName>{subjectData?.name || "사용자"}</S.ProfileName>
         </S.ProfileWrapper>
 
         <S.TextAreaContent
@@ -64,6 +69,7 @@ export default function PostModal({ subjectId, onClose, onSuccess }) {
           placeholder="질문을 입력해주세요"
           value={questionContent}
           onChange={handleInputChange}
+          maxLength={MAX_LENGTH}
           autoFocus
         />
         <S.CharCount $isOver={questionContent.length > MAX_LENGTH}>

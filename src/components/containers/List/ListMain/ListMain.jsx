@@ -1,57 +1,96 @@
-import { useState } from "react";
+import { useCallback, useState, useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
 
+import { useDeviceType } from "@/hooks/useDeviceType";
+import { ArrowUpIcon } from "@/assets/icons/ArrowUpIcon";
+import { ArrowDownIcon } from "@/assets/icons/ArrowDownIcon";
+import { subjectApi } from "@/apis/subject";
+import { LoadingSpinner } from "@/assets/icons/LoadingSpinnerIcon";
+import { openToast } from "@/utils/toast";
+
 import * as S from "@/components/containers/List/ListMain/ListMain.style";
-import { ArrowDownIcon, ArrowUpIcon } from "@/assets/icons/Icons";
 import ListCard from "@/components/containers/List/ListCard/ListCard";
-import { useDeviceType } from "@/components/common/Hook/useDeviceType";
 import Pagination from "@/components/common/Pagination/index";
-
-// import InfiniteScrollObserver from "@/components/common/InfiniteScroll";
-
+import InfiniteScrollObserver from "@/components/common/InfiniteScroll/InfiniteScrollObserver";
+import SkeletonList from "@/components/containers/List/SkeletonList/SkeletonList";
 
 export default function ListMain() {
-  const [subjects, setSubjects] = useState([
-  { id: 7, name: "최유리", imageSource: "https://picsum.photos/600/600", questionCount: 3, createdAt: "2026-03-01T10:00:00" },
-  { id: 8, name: "정민수", imageSource: "https://picsum.photos/600/600", questionCount: 8, createdAt: "2026-03-02T11:20:00" },
-  { id: 9, name: "한지민", imageSource: "https://picsum.photos/600/600", questionCount: 1, createdAt: "2026-03-03T09:15:00" },
-  { id: 10, name: "abc", imageSource: "https://picsum.photos/600/600", questionCount: 12, createdAt: "2026-03-04T14:10:00" },
-  { id: 11, name: "유재석", imageSource: "", questionCount: 6, createdAt: "2026-03-05T16:30:00" },
-  { id: 12, name: "강호동", imageSource: "", questionCount: 9, createdAt: "2026-03-06T13:40:00" },
-  { id: 71, name: "박서준", imageSource: "", questionCount: 3, createdAt: "2026-03-07T08:10:00" },
-  { id: 81, name: "김태리", imageSource: "", questionCount: 8, createdAt: "2026-03-07T12:50:00" },
-  { id: 91, name: "이도현", imageSource: "", questionCount: 1, createdAt: "2026-03-08T09:00:00" },
-  { id: 101, name: "x", imageSource: "", questionCount: 12, createdAt: "2026-03-08T15:25:00" }
- ] );
+  const [subjects, setSubjects] = useState([]);
+  const [totalCount, setTotalCount] = useState(0);
+  const [isFirstLoading, setIsFirstLoading] = useState(false);
+  const [showSpinner, setShowSpinner] = useState(false);
+  const [loadedPage, setLoadedPage] = useState(1);
 
-  const LIMIT = 8;
+  const { isPC, isLargeTablet } = useDeviceType();
+  const isDesktopMode = isPC || isLargeTablet;
+  const LIMIT = isDesktopMode ? 8 : 6;
+
   const [searchParams, setSearchParams] = useSearchParams();
-  const currentPage = Number(searchParams.get("page")) || 1;
-  const startIndex = (currentPage - 1) * LIMIT;
-  const endIndex = startIndex + LIMIT;
+  const rawPage = Number(searchParams.get("page")) || 1;
+  const totalPage = Math.ceil(totalCount / LIMIT);
 
-  const [sortBy, setSortBy] = useState("createdAt");
+  const currentPage = Math.max(1, Math.min(rawPage, totalPage));
+
+  const [sortBy, setSortBy] = useState(() => {
+    return localStorage.getItem("sortBy") || "createdAt";
+  });
   const [isOpen, setIsOpen] = useState(false);
 
-  const { isPC, isLargeTablet } = useDeviceType(); 
-  const handleSortClick = (value) => {
-  if (sortBy !== value) { 
-    setSortBy(value);
-    
-    const newParams = new URLSearchParams(searchParams);
-    newParams.set("page", "1"); 
-    setSearchParams(newParams);
-  }
-  setIsOpen(false);
-};
-  const sortedSubjects = [...subjects].sort((a, b) => {
-    if (sortBy === "name") {
-      return a.name.localeCompare(b.name, "ko");
-    }
-    return new Date(b.createdAt)-new Date(a.createdAt);
-  });
+  const sortedSubjects = (data) => {
+    if (!data) return [];
+    return [...data].sort((a, b) => {
+      if (sortBy === "name") {
+        return a.name.localeCompare(b.name, "ko");
+      }
+      return new Date(b.createdAt) - new Date(a.createdAt);
+    });
+  };
 
-  const currentItems = sortedSubjects.slice(startIndex, endIndex);
+  const fetchSubject = useCallback(async () => {
+    setIsFirstLoading(true);
+    setShowSpinner(false);
+    const timer = setTimeout(() => {
+      setShowSpinner(true);
+    }, 1000);
+
+    try {
+      const response = await subjectApi.getFeedList(1000, 0);
+      const { count, results } = response;
+      setTotalCount(count);
+      setSubjects(sortedSubjects(results));
+    } catch (error) {
+      openToast.error("데이터를 불러오는 데 실패했습니다");
+    } finally {
+      clearTimeout(timer);
+      setIsFirstLoading(false);
+      setShowSpinner(false);
+    }
+  }, [sortBy]);
+
+  useEffect(() => {
+    fetchSubject();
+  }, [fetchSubject, currentPage]);
+
+  const handleSortClick = (value) => {
+    if (sortBy !== value) {
+      setSortBy(value);
+      localStorage.setItem("sortBy", value);
+      const newParams = new URLSearchParams(searchParams);
+      newParams.set("page", "1");
+      setSearchParams(newParams);
+    }
+    setIsOpen(false);
+  };
+
+  const displaySubjects = isDesktopMode
+    ? subjects?.slice((currentPage - 1) * LIMIT, currentPage * LIMIT)
+    : subjects?.slice(0, loadedPage * LIMIT);
+
+  const loadMore = useCallback(() => {
+    if (loadedPage < totalPage) {
+      setLoadedPage((prev) => prev + 1);
+    }
+  }, [loadedPage, totalPage]);
 
   return (
     <S.MainSection>
@@ -76,17 +115,28 @@ export default function ListMain() {
           )}
         </S.SelectContainer>
       </S.MainHeader>
-
-      <S.CardGrid>
-        {currentItems.map((item) =>
-          item ? <ListCard key={item.id} subject={item} /> : null,
-        )}
-      </S.CardGrid>
-
-      {(isPC || isLargeTablet) ? (
-        <Pagination totalPage={Math.ceil(subjects.length / 8)} />
+      {isFirstLoading && displaySubjects.length == 0 ? (
+        <SkeletonList />
       ) : (
-        <div>{/* 여기에 무한 스크롤 타겟 추가 */}</div>
+        <>
+          <S.CardGrid $isLoading={showSpinner}>
+            {displaySubjects.map((item) =>
+              item ? <ListCard key={item.id} subject={item} /> : null,
+            )}
+          </S.CardGrid>
+          {showSpinner && (
+            <S.SpinnerWrapper>
+              <LoadingSpinner />
+            </S.SpinnerWrapper>
+          )}
+        </>
+      )}
+      {isDesktopMode ? (
+        <Pagination totalPage={totalPage} />
+      ) : (
+        displaySubjects.length < totalCount && (
+          <InfiniteScrollObserver onIntersect={loadMore} />
+        )
       )}
     </S.MainSection>
   );
