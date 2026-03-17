@@ -74,7 +74,7 @@ export const FoldBtn = styled.span`
   margin-top: 4px;
   background: none;
   border: none;
-  color: #888;
+  color: ${({ theme }) => theme.colors.gray40};
   cursor: pointer;
 `;
 
