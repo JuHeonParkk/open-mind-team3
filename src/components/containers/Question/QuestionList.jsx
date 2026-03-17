@@ -127,12 +127,14 @@ export default function QuestionList({ subjectData, subjectId, isAnswer }) {
             <MenuIcon size={24} />
           </S.MenuButton>
         </S.FloatingButtonWrapper>
-        <S.FloatingButtonWrapper>
-          <span>질문 작성하기</span>
-          <S.QuestionPostButton onClick={() => setIsOpen(true)}>
-            <MessagesIcon size={24} />
-          </S.QuestionPostButton>
-        </S.FloatingButtonWrapper>
+        {!isAnswer && (
+          <S.FloatingButtonWrapper>
+            <span>질문 작성하기</span>
+            <S.QuestionPostButton onClick={() => setIsOpen(true)}>
+              <MessagesIcon size={24} />
+            </S.QuestionPostButton>
+          </S.FloatingButtonWrapper>
+        )}
       </S.FloatingGroup>
 
       {isOpen && (
