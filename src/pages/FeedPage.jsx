@@ -4,6 +4,8 @@ import { useEffect, useState } from "react";
 import { subjectApi } from "@/apis/subject";
 import { openToast } from "@/utils/toast";
 import { STORAGE } from "@/constants/index";
+
+import { LoadingSpinner } from "@/assets/icons/LoadingSpinnerIcon";
 import FeedHeader from "@/components/containers/Question/FeedHeader/FeedHeader";
 import QuestionList from "@/components/containers/Question/QuestionList";
 import NotFoundPage from "@/pages/NotFoundPage/NotFoundPage";
@@ -69,9 +71,12 @@ export default function FeedPage() {
     );
   }
 
-  // Todo: 스피너로 변경
   if (isLoading || !subjectData) {
-    return <div>Loading...</div>;
+    return (
+      <S.SpinnerWrapper>
+        <LoadingSpinner size={50} />
+      </S.SpinnerWrapper>
+    );
   }
 
   return (

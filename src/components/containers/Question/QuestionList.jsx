@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState, useCallback, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
 import { subjectApi } from "@/apis/subject";
@@ -6,40 +6,72 @@ import { openToast } from "@/utils/toast";
 import { MenuIcon } from "@/assets/icons/MenuIcon";
 import { MessagesIcon } from "@/assets/icons/MessagesIcon";
 import { STORAGE } from "@/constants";
+import { LoadingSpinner } from "@/assets/icons/LoadingSpinnerIcon";
 
 import QuestionCount from "@/components/containers/Question/QuestionCount/QuestionCount";
 import QuestionItems from "@/components/containers/Question/QuestionItems/QuestionItems";
 import PostModal from "@/components/containers/PostModal/PostModal";
 import Confirm from "@/components/common/Confirm";
+import InfiniteScrollObserver from "@/components/common/InfiniteScroll/InfiniteScrollObserver";
 import SkeletonQuestion from "@/components/containers/Question/SkeletonQuestion/SkeletonQuestion";
 
 import * as S from "@/components/containers/Question/QuestionList.style";
 
+const LIMIT = 8;
+
 export default function QuestionList({ subjectData, subjectId, isAnswer }) {
   const [questions, setQuestions] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
+  const [totalCount, setTotalCount] = useState(0); // 질문 총 개수
+  const [isLoading, setIsLoading] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const [deleteConfirmOpen, setDeleteConfirmOpen] = useState(false);
+  const [hasNext, setHasNext] = useState(true);
+
   const navigate = useNavigate();
+  const offsetRef = useRef(0);
 
-  const fetchQuestions = useCallback(async () => {
-    if (!subjectId) return;
+  const fetchQuestions = useCallback(
+    async (isInitial = false) => {
+      if (isLoading || (!isInitial && !hasNext)) return;
 
-    setIsLoading(true);
-    try {
-      const data = await subjectApi.getQuestions(subjectId);
-      setQuestions(data.results);
-    } catch (error) {
-      openToast.error("질문 목록을 가져오는데 실패했습니다.");
-      console.error("Error fetching questions:", error);
-    } finally {
-      setIsLoading(false);
-    }
-  }, [subjectId]);
+      setIsLoading(true);
+      try {
+        const currentOffset = isInitial ? 0 : offsetRef.current;
+
+        const response = await subjectApi.getQuestions(
+          subjectId,
+          LIMIT,
+          currentOffset,
+        );
+        const { results, next, count } = response;
+
+        setQuestions((prev) => {
+          if (isInitial) return results;
+
+          const newItems = results.filter(
+            (item) => !prev.some((prevItem) => prevItem.id === item.id),
+          );
+          return [...prev, ...newItems];
+        });
+        setTotalCount(count);
+        setHasNext(!!next);
+        offsetRef.current = currentOffset + results.length;
+      } catch (error) {
+        openToast.error("질문 목록을 가져오는데 실패했습니다.");
+        console.error("Error fetching questions:", error);
+      } finally {
+        setIsLoading(false);
+      }
+    },
+    [subjectId, isLoading, hasNext],
+  );
 
   useEffect(() => {
-    fetchQuestions();
-  }, [fetchQuestions]);
+    setQuestions([]);
+    setHasNext(true);
+    offsetRef.current = 0;
+    fetchQuestions(true);
+  }, [subjectId]);
 
   const handleDeleteFeed = async () => {
     try {
@@ -55,10 +87,6 @@ export default function QuestionList({ subjectData, subjectId, isAnswer }) {
     }
   };
 
-  if (isLoading) {
-    return <SkeletonQuestion />;
-  }
-
   return (
     <>
       {isAnswer && (
@@ -69,15 +97,29 @@ export default function QuestionList({ subjectData, subjectId, isAnswer }) {
         </S.ButtonWrapper>
       )}
 
-      <S.QuestionListWrapper>
-        <QuestionCount questions={questions} />
-        <QuestionItems
-          questions={questions}
-          isAnswer={isAnswer}
-          fetchQuestions={fetchQuestions}
-          subjectData={subjectData}
-        />
-      </S.QuestionListWrapper>
+      {isLoading && questions.length === 0 ? (
+        <SkeletonQuestion />
+      ) : (
+        <S.QuestionListWrapper>
+          <QuestionCount totalCount={totalCount} />
+          <QuestionItems
+            questions={questions}
+            isAnswer={isAnswer}
+            fetchQuestions={() => fetchQuestions(true)}
+            subjectData={subjectData}
+          />
+
+          {!isLoading && hasNext && questions.length > 0 && (
+            <InfiniteScrollObserver onIntersect={() => fetchQuestions(false)} />
+          )}
+
+          {isLoading && questions.length > 0 && (
+            <S.SpinnerWrapper>
+              <LoadingSpinner size={50} />
+            </S.SpinnerWrapper>
+          )}
+        </S.QuestionListWrapper>
+      )}
 
       <S.FloatingGroup>
         <S.FloatingButtonWrapper>
@@ -99,7 +141,7 @@ export default function QuestionList({ subjectData, subjectId, isAnswer }) {
           subjectId={subjectId}
           subjectData={subjectData}
           onClose={() => setIsOpen(false)}
-          onSuccess={fetchQuestions}
+          onSuccess={() => fetchQuestions(true)}
         />
       )}
 
