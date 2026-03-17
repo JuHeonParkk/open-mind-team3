@@ -101,17 +101,18 @@ export default function FeedPage() {
   return (
     <>
       <FeedHeader subjectData={subjectData} />
-      {isLoading ? (
-        <SkeletonQuestion />
-      ) : (
-        <S.Container>
+
+      <S.Container>
+        {isLoading ? (
+          <SkeletonQuestion />
+        ) : (
           <QuestionList
             subjectData={subjectData}
             subjectId={subjectId}
             isAnswer={isAnswer}
           />
-        </S.Container>
-      )}
+        )}
+      </S.Container>
     </>
   );
 }
