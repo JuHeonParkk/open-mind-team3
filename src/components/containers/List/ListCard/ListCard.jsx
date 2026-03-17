@@ -12,12 +12,11 @@ import * as S from "@/components/containers/List/ListCard/ListCard.style";
 
 export default function ListCard({ subject }) {
   const { name, imageSource, questionCount, id } = subject;
-  const [isFront, setIsFront] = useState(true);
+
   const [questionContent, setQuestionContent] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+
   const navigate = useNavigate();
-  const handleMouseEnter = () => setIsFront(false);
-  const handleMouseLeave = () => setIsFront(true);
 
   const handleCardClick = () => {
     navigate(`/post/${id}`);
@@ -26,8 +25,6 @@ export default function ListCard({ subject }) {
   const fetchQuestions = async () => {
     setIsLoading(true);
     try {
-      // await new Promise((resolve) => setTimeout(resolve, 2000));
-      // throw new Error("test");
       const response = await subjectApi.getQuestions(id, 2, 0);
       setQuestionContent(response.results || []);
     } catch (e) {
@@ -37,17 +34,14 @@ export default function ListCard({ subject }) {
       setIsLoading(false);
     }
   };
+
   useEffect(() => {
     fetchQuestions();
   }, [id]);
 
   return (
-    <S.CardContainer
-      onClick={handleCardClick}
-      onMouseEnter={handleMouseEnter}
-      onMouseLeave={handleMouseLeave}
-    >
-      <S.CardInner $isFront={isFront}>
+    <S.CardContainer onClick={handleCardClick}>
+      <S.CardInner>
         <S.CardFront>
           <S.CardProfile>
             <S.SubjectImage
@@ -57,11 +51,13 @@ export default function ListCard({ subject }) {
               <span>{name}</span>
             </S.SubjectName>
           </S.CardProfile>
+
           <S.CardFooter>
             <S.QuestionLabel>
               <MessagesIcon />
               <span>질문하기</span>
             </S.QuestionLabel>
+
             <S.QuestionCount>{questionCount ?? 0}개</S.QuestionCount>
           </S.CardFooter>
         </S.CardFront>
@@ -69,6 +65,7 @@ export default function ListCard({ subject }) {
         <S.CardBack>
           <S.QuestionContent>
             <h3>{name}님이 받은 질문</h3>
+
             {isLoading && (
               <S.SpinnerWrapper>
                 <LoadingSpinner />
