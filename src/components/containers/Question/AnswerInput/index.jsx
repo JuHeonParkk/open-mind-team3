@@ -33,7 +33,7 @@ export default function AnswerInput({
         openToast.success("답변을 수정했습니다.");
         setIsEditing(false);
       } else {
-        await questionApi.createAnswer(question.id, content);
+        await questionApi.createAnswer(question.id, content, false);
         openToast.success("답변을 등록했습니다.");
         setContent("");
       }

@@ -12,10 +12,10 @@ export const questionApi = {
     instance.post(`questions/${questionId}/reaction/`, { type }),
 
   // 질문 답변 등록
-  createAnswer: (questionId, content) =>
+  createAnswer: (questionId, content, isRejected = false) =>
     instance.post(`questions/${questionId}/answers/`, {
       content,
       questionId,
-      isRejected: false,
+      isRejected,
     }),
 };

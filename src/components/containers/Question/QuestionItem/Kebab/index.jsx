@@ -28,32 +28,22 @@ export default function Kebab({
     e.stopPropagation();
     setIsOpen((prev) => !prev);
   }
-
   async function handleRejectButton() {
     if (!question) return;
 
     try {
-      let targetAnswerId = answer?.id;
-
-      // 답변이 없는경우 더미 답변 생성 후 개별조회
-      if (!targetAnswerId) {
-        await questionApi.createAnswer(question.id, "거절용 더미 답변");
-        const response = await questionApi.getQuestion(question.id);
-        targetAnswerId = response.answer.id;
-      }
-
-      if (targetAnswerId) {
-        await answerApi.rejectAnswer(targetAnswerId);
-        openToast.success("답변을 거절했습니다.");
-        fetchQuestions();
+      if (!answer) {
+        await questionApi.createAnswer(question.id, "_", true);
       } else {
-        throw new Error();
+        await answerApi.rejectAnswer(answer.id);
       }
+
+      openToast.success("답변을 거절했습니다.");
+      fetchQuestions();
     } catch {
       openToast.error("답변 거절에 실패했습니다. 다시 시도해 주세요");
     }
   }
-
   async function handleDeleteButton() {
     if (!question) return;
 
